@@ -15,6 +15,8 @@ import jakarta.persistence.criteria.Root;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
 import java.util.List;
 
 /**
@@ -165,6 +167,41 @@ public class DlcJpaController implements Serializable {
       cq.select(em.getCriteriaBuilder().count(rt));
       Query q = em.createQuery(cq);
       return ((Long) q.getSingleResult()).intValue();
+    } finally {
+      em.close();
+    }
+  }
+  
+  public List<Dlc> findDlcByTitulo(String titulo) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Dlc> cq = cb.createQuery(Dlc.class);
+      Root<Dlc> root = cq.from(Dlc.class);
+      cq.select(root).where(cb.like(root.get("titulo"), "%" + titulo + "%"));
+      return em.createQuery(cq).getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  public List<Dlc> findDlcByPrecio(Integer precioMin, Integer precioMax) {
+    EntityManager em = getEntityManager();
+    try {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Dlc> cq = cb.createQuery(Dlc.class);
+      Root<Dlc> root = cq.from(Dlc.class);
+
+      Predicate predicate = cb.conjunction();
+      if (precioMin != null) {
+          predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("precio"), precioMin));
+      }
+      if (precioMax != null) {
+          predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("precio"), precioMax));
+      }
+
+      cq.select(root).where(predicate);
+      return em.createQuery(cq).getResultList();
     } finally {
       em.close();
     }
