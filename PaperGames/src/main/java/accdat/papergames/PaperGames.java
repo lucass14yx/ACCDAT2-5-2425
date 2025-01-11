@@ -5,6 +5,7 @@
 package accdat.papergames;
 
 import accdat.papergames.Controlador.Controlador;
+import accdat.papergames.Modelo.Modelo;
 import accdat.papergames.Vista.InterfazVista;
 import accdat.papergames.Vista.VentanaPrincipalGUI;
 
@@ -16,6 +17,7 @@ public class PaperGames {
 
     public static void main(String[] args) {
         InterfazVista vista = new VentanaPrincipalGUI();
-        Controlador control = new Controlador(vista);
+        Modelo modelo = new Modelo();
+        Controlador control = new Controlador(vista,modelo);
     }
 }

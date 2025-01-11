@@ -13,6 +13,9 @@ import accdat.papergames.Controlador.Controlador;
 public interface InterfazVista {
     void setControlador(Controlador c);
     void arranca();
-
     
+    void haceAlgo(String s);
+
+    static final String PRUEBA1 = "Prueba1";
+    static final String PRUEBA2 = "Prueba2";
 }
