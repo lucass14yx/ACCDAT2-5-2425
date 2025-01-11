@@ -20,18 +20,18 @@ import java.util.List;
  *
  * @author rezzt
  */
-public class FiltrosBBDD {
+public class FiltrosBBDD_JPQL {
    // constantes & atributos ->
   static EntityManagerFactory emFactory;
   static EntityManager entityManager;
-  private static FiltrosBBDD instace;
+  private static FiltrosBBDD_JPQL instace;
   
  //------------------------------------------------------------------------------->
    // constructores ->
-  private FiltrosBBDD () {}
-  public static FiltrosBBDD getInstance () {
+  private FiltrosBBDD_JPQL () {}
+  public static FiltrosBBDD_JPQL getInstance () {
     if (instace == null) {
-      instace = new FiltrosBBDD();
+      instace = new FiltrosBBDD_JPQL();
     }
     return instace;
   }
