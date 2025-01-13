@@ -8,13 +8,15 @@ import accdat.papergames.Modelo.Controllers.*;
 import accdat.papergames.Modelo.Persistencia.*;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 /**
  *
- * @author lxxkass 13-1-25
+ * @author lxxkass & JorgeHerrera
  */
 public class ModeloService {
     private EntityManagerFactory emf;
@@ -32,9 +34,81 @@ public class ModeloService {
         modoJuegoJpaC = new ModoJuegoJpaController(emf);
         plataformaJpaC = new PlataformaJpaController(emf);
     }
+    /** *************************
+     ******** LECTORES **********    JorgeHerrera
+     ************************ **/
+    
+    /**
+     * Te muestra un listado de todos los videojuegos
+     */
+    public void listarVideojuegos(){
+        List<Videojuego> videojuegosListado;
+        
+        videojuegosListado = videojuegoJpaC.findVideojuegoEntities();
+        
+        for (Videojuego v: videojuegosListado){
+            System.out.println("Nombre del videojuego: "+ v.getTitulo());
+        }
+    }
+    
+    
+    /**
+     * Lista los modos de juego asociados a un videojuego
+     * @param idVideojuego Id del videojuego del que vamos a extrar los modos de juego
+     */
+    public void listarVideojuegoModoJuego(int idVideojuego){
+        Videojuego videojuego = videojuegoJpaC.findVideojuego((long)idVideojuego );
+        
+        Collection<ModoJuego>listaVideojuegos = videojuego.getModoJuegoCollection();
+        
+        for (ModoJuego v: listaVideojuegos){
+            System.out.println("Modo de juego: "+ v.getNombreModoJuego());
+        }
+    }
+    
+    
+    /**
+     * Te muestra videojuegos en listas de un numero que le especifiques tu
+     */
+    public void listarVideojuegosPorTramos(){
+        List<Videojuego> videojuegoListado;
+
+        
+        System.out.println("TODOS LOS DEPARTAMENTOS");
+        listarVideojuegos();
+        System.out.println("--------------------------------------------------------------");
+        
+        //***********************************************************************************
+        System.out.println("Trae 3 registros empezando en la pos 0");
+        
+        // 3 = NUMERO DE REGISTROS MAXIMO
+        // 0 = POS PARRTIR DE LA CUAL LO QUEIRO
+        videojuegoListado = videojuegoJpaC.findVideojuegoEntities(3,0);
+        
+        for (Videojuego v: videojuegoListado){
+            System.out.println("Nombre videojuego: "+ v.getTitulo());
+        }
+        System.out.println("--------------------------------------------------------------");
+        
+    }
+    
+    /**
+     * Lista solo 1 videojuego
+     * @param idVideojuego Id del videojuego que queremos extraer
+     */
+    public void listarUnVideojuego(int idVideojuego){
+        Videojuego videojuego = videojuegoJpaC.findVideojuego( (long)idVideojuego );
+        
+        System.out.println(videojuego.getTitulo());
+
+    }
+    
+    
+    
+    
     /** ***************************
-     ******** INSERTORES **********
-     *************************** **/
+     ******** INSERTORES **********    lxxkass
+     ************************** **/
     /**
      * Metodo insertor para Videojuegos
      * @param videojuego 
@@ -96,8 +170,8 @@ public class ModeloService {
         }
     }
     /** ***************************
-     ******** BORRADORES **********
-     *************************** **/
+     ******** BORRADORES **********   lxxkass
+     ************************** **/
     /**
      * Metodo borrador para Videojuegos
      * @param videojuego 
@@ -157,6 +231,31 @@ public class ModeloService {
         } catch (Exception ex) {
             Logger.getLogger(ModeloService.class.getName()).log(Level.SEVERE,"Error al borrar la Plataforma: " + plataforma, ex);
         }
+    }
+    
+     /** *****************************
+     ******** MODIFICADORES **********    JorgeHerrera
+     ***************************** **/
+    /**
+     * Modifica un videojuego
+     * @param idVideojuego Id del videojuego que vamos a modificar (este id no se modifica
+     * @param titulo titulo nuevo del videojuego
+     * @param descripcion descripcion nueva del videojuego
+     * @param año año nuevo del videojuego
+     * @param pegi pegi nuevo del videojuego
+     * @param nombrePlataforma nombrePlataforma nueva del videojuego
+     * @param nombreGenero nombreGenero nuevo del videojuego
+     */
+    public void modificarDepartamento(int idVideojuego, String titulo, String descripcion, short año, short pegi, Plataforma nombrePlataforma, Genero nombreGenero){
+        Videojuego videojuego = videojuegoJpaC.findVideojuego( (long)idVideojuego );
+        
+        videojuego.setIdVideojuego( (long)idVideojuego );
+        videojuego.setTitulo(titulo);
+        videojuego.setDescripcion(descripcion);
+        videojuego.setAño(año);
+        videojuego.setPegi(pegi);
+        videojuego.setNombrePlataforma(nombrePlataforma);
+        videojuego.setNombreGenero(nombreGenero);
     }
     
 }
