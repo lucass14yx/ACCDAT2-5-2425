@@ -194,7 +194,11 @@ public class Videojuego implements Serializable {
 
   @Override
   public String toString() {
+<<<<<<< HEAD
     return "accdat.papergames.Modelo.Persistencia.Videojuego[ idVideojuego=" + idVideojuego + " ]";
+=======
+    return "accdat.papergames.Modelo.Persistencia.Videojuego[ Titulo=" + titulo + " ]";
+>>>>>>> Lucas
   }
   
 }
