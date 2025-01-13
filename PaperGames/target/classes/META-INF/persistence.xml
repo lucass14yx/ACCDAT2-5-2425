@@ -8,7 +8,7 @@
     <class>accdat.papergames.Modelo.Persistencia.Videojuego</class>
     <class>accdat.papergames.Modelo.Persistencia.ModoJuego</class>
     <properties>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:FREE"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/freepdb1"/>
       <property name="jakarta.persistence.jdbc.user" value="adminACCDAT"/>
       <property name="jakarta.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
       <property name="jakarta.persistence.jdbc.password" value="adminACCDAT"/>

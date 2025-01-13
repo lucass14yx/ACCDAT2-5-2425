@@ -8,17 +8,10 @@
     <class>accdat.papergames.Modelo.Persistencia.Videojuego</class>
     <class>accdat.papergames.Modelo.Persistencia.ModoJuego</class>
     <properties>
-<<<<<<< HEAD
-      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/freepdb1"/>
-      <property name="javax.persistence.jdbc.user" value="adminACCDAT"/>
-      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-      <property name="javax.persistence.jdbc.password" value="adminACCDAT"/>
-=======
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:FREE"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/freepdb1"/>
       <property name="jakarta.persistence.jdbc.user" value="adminACCDAT"/>
       <property name="jakarta.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
       <property name="jakarta.persistence.jdbc.password" value="adminACCDAT"/>
->>>>>>> Lucas
     </properties>
   </persistence-unit>
 </persistence>
