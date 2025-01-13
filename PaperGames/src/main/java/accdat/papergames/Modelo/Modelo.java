@@ -6,7 +6,11 @@ package accdat.papergames.Modelo;
 
 /**
  *
+<<<<<<< HEAD
  * @author USUARIO
+=======
+ * @author lxxkass
+>>>>>>> Lucas
  */
 public class Modelo {
     //Esto solo es un ejemplo
