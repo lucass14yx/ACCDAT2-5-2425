@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author lxxkass
+ * @author lxxkass 13-1-25
  */
 public class ModeloService {
     private EntityManagerFactory emf;
