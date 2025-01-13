@@ -32,6 +32,14 @@ public class VisorVideojuegos extends javax.swing.JPanel {
    */
   public VisorVideojuegos() {
     initComponents();
+    jTextField1.setEditable(false);
+    vAnioSalida.setEditable(false);
+    vDLC.setEditable(false);
+    vDescripcion.setEditable(false);
+    vGenero.setEditable(false);
+    vPEGI.setEditable(false);
+    vPlataformaText.setEditable(false);
+    vTitulo.setEditable(false);
   }
 
   /**
@@ -57,7 +65,7 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     jTextField1 = new javax.swing.JTextField();
     vTitulo = new javax.swing.JTextField();
     vListaPlataformas = new javax.swing.JScrollPane();
-    jList1 = new javax.swing.JList<>();
+    jListaPlataforma = new javax.swing.JList<>();
     vDLC = new javax.swing.JTextField();
     vListaDLC = new javax.swing.JScrollPane();
     vListaDLCs = new javax.swing.JList<>();
@@ -76,6 +84,10 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     });
     jScrollPane2.setViewportView(vListaPlataforma1);
 
+    setBackground(new java.awt.Color(200, 212, 227));
+    setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+    setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
     vDescripcion.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         vDescripcionActionPerformed(evt);
@@ -93,17 +105,19 @@ public class VisorVideojuegos extends javax.swing.JPanel {
       public String getElementAt(int i) { return strings[i]; }
     });
     jScrollPane3.setViewportView(vListaModoJuego);
+    vListaModoJuego.getAccessibleContext().setAccessibleParent(this);
 
     jTextField1.setText("Modo de Juego");
 
-    jList1.setModel(new javax.swing.AbstractListModel<String>() {
+    jListaPlataforma.setModel(new javax.swing.AbstractListModel<String>() {
       String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
       public int getSize() { return strings.length; }
       public String getElementAt(int i) { return strings[i]; }
     });
-    vListaPlataformas.setViewportView(jList1);
+    vListaPlataformas.setViewportView(jListaPlataforma);
+    jListaPlataforma.getAccessibleContext().setAccessibleParent(this);
 
-    vDLC.setText("jTextField2");
+    vDLC.setText("DLC");
 
     vListaDLCs.setModel(new javax.swing.AbstractListModel<String>() {
       String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -111,6 +125,7 @@ public class VisorVideojuegos extends javax.swing.JPanel {
       public String getElementAt(int i) { return strings[i]; }
     });
     vListaDLC.setViewportView(vListaDLCs);
+    vListaDLCs.getAccessibleContext().setAccessibleParent(this);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -140,7 +155,7 @@ public class VisorVideojuegos extends javax.swing.JPanel {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(vAnioSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(vPEGI, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
+            .addComponent(vPEGI, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
         .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -163,12 +178,8 @@ public class VisorVideojuegos extends javax.swing.JPanel {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addComponent(jScrollPane3)
-              .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(vListaPlataformas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-              .addGroup(layout.createSequentialGroup()
-                .addComponent(vListaDLC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)))))
+              .addComponent(vListaPlataformas, javax.swing.GroupLayout.Alignment.TRAILING)
+              .addComponent(vListaDLC, javax.swing.GroupLayout.Alignment.TRAILING))))
         .addContainerGap())
     );
   }// </editor-fold>//GEN-END:initComponents
@@ -179,7 +190,7 @@ public class VisorVideojuegos extends javax.swing.JPanel {
 
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JList<String> jList1;
+  private javax.swing.JList<String> jListaPlataforma;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JScrollPane jScrollPane3;
@@ -199,26 +210,20 @@ public class VisorVideojuegos extends javax.swing.JPanel {
   private javax.swing.JTextField vTitulo;
   // End of variables declaration//GEN-END:variables
 
+  
   private void asignacionAtributos () {
     this.titulo = baseVideojuego.getTitulo();
     this.descripcion = baseVideojuego.getDescripcion();
     this.anioSalida = baseVideojuego.getAño();
-    this.genero = baseVideojuego.getNombreGenero().getNombreGenero();
-    this.listaModosJuego = extraerNombreModosJuego(baseVideojuego.getModoJuegoCollection());
-    this.listaPlataformas = extraerNombrePlataformas(baseVideojuego.getPlataformaCollection());
-    this.listaDLC = extraerNombreListaDLC(baseVideojuego.getDlcCollection());
   }
   
-  private void asignacionContenidoElementGraficos () {
+  public void asignacionContenidoElementGraficos () {
     asignacionAtributos();
     
     vTitulo.setText(this.titulo);
     vGenero.setText(this.genero);
     vAnioSalida.setText(Integer.toString(this.anioSalida));
     vPEGI.setText(Integer.toString(this.pegi));
-    vListaPlataforma.setListData((String[]) this.listaPlataformas.toArray());
-    vListaModoJuego.setListData((String[]) this.listaModosJuego.toArray());
-    vListaDLCs.setListData((String[]) this.listaDLC.toArray());
   }
   
   private List<String> extraerNombrePlataformas (Collection<Plataforma> inputListaPlataformas) {
