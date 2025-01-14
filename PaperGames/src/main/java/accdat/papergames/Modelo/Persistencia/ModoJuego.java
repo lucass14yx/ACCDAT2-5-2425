@@ -35,9 +35,10 @@ public class ModoJuego implements Serializable {
   @Id
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "NOMBRE_MODO_JUEGO")
+  @Size(min = 1, max = 100) // Refleja el tamaño máximo de la columna
+  @Column(name = "NOMBRE_MODO_JUEGO", nullable = false, length = 100)
   private String nombreModoJuego;
+
   @ManyToMany(mappedBy = "modoJuegoCollection")
   private Collection<Videojuego> videojuegoCollection;
 

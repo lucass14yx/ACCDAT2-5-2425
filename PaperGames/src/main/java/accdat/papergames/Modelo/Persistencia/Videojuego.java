@@ -46,38 +46,47 @@ public class Videojuego implements Serializable {
   @NotNull
   @Column(name = "ID_VIDEOJUEGO")
   private Long idVideojuego;
+
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 200)
-  @Column(name = "TITULO")
+  @Size(min = 1, max = 200) // Tamaño máximo de 200 caracteres
+  @Column(name = "TITULO", nullable = false, length = 200)
   private String titulo;
+
   @Lob
   @Column(name = "DESCRIPCION")
   private String descripcion;
+
   @Basic(optional = false)
   @NotNull
-  @Column(name = "A\u00d1O")
+  @Column(name = "AÑO", nullable = false)
   private short año;
+
   @Basic(optional = false)
   @NotNull
-  @Column(name = "PEGI")
+  @Column(name = "PEGI", nullable = false)
   private short pegi;
+
   @JoinTable(name = "VIDEOJUEGO_PLATAFORMAS", joinColumns = {
-    @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
-    @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")})
+      @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
+      @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")})
   @ManyToMany
   private Collection<Plataforma> plataformaCollection;
+
   @JoinTable(name = "VIDEOJUEGO_MODO_JUEGO", joinColumns = {
-    @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
-    @JoinColumn(name = "NOMBRE_MODO_JUEGO", referencedColumnName = "NOMBRE_MODO_JUEGO")})
+      @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
+      @JoinColumn(name = "NOMBRE_MODO_JUEGO", referencedColumnName = "NOMBRE_MODO_JUEGO")})
   @ManyToMany
   private Collection<ModoJuego> modoJuegoCollection;
+
   @JoinColumn(name = "NOMBRE_GENERO", referencedColumnName = "NOMBRE_GENERO")
   @ManyToOne
   private Genero nombreGenero;
+
   @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")
   @ManyToOne
   private Plataforma nombrePlataforma;
+
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVideojuego")
   private Collection<Dlc> dlcCollection;
 
