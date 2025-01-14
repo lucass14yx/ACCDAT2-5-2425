@@ -7,6 +7,8 @@ package accdat.papergames.Modelo.Persistencia;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
@@ -14,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -33,27 +36,32 @@ import java.math.BigDecimal;
   @NamedQuery(name = "Dlc.findByTitulo", query = "SELECT d FROM Dlc d WHERE d.titulo = :titulo"),
   @NamedQuery(name = "Dlc.findByPrecio", query = "SELECT d FROM Dlc d WHERE d.precio = :precio")})
 public class Dlc implements Serializable {
-
   private static final long serialVersionUID = 1L;
+
   @Id
   @Basic(optional = false)
   @NotNull
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "ID_DLC")
   private Long idDlc;
+
   @Basic(optional = false)
   @NotNull
   @Size(min = 1, max = 200)
-  @Column(name = "TITULO")
+  @Column(name = "TITULO", nullable = false, length = 200)
   private String titulo;
+
   @Lob
   @Column(name = "DESCRIPCION")
   private String descripcion;
-  // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
   @Basic(optional = false)
   @NotNull
-  @Column(name = "PRECIO")
+  @Digits(integer = 10, fraction = 2) // Refleja precisión y escala definidas en el script SQL
+  @Column(name = "PRECIO", nullable = false, precision = 10, scale = 2)
   private BigDecimal precio;
-  @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")
+
+  @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO", nullable = false)
   @ManyToOne(optional = false)
   private Videojuego idVideojuego;
 

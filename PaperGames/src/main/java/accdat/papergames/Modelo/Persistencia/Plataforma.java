@@ -37,16 +37,19 @@ public class Plataforma implements Serializable {
   @Id
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "NOMBRE_PLATAFORMA")
+  @Size(min = 1, max = 100) // Refleja el tamaño máximo definido en el script SQL
+  @Column(name = "NOMBRE_PLATAFORMA", nullable = false, length = 100)
   private String nombrePlataforma;
+
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "TIPO")
+  @Size(min = 1, max = 50) // Refleja el tamaño máximo definido en el script SQL
+  @Column(name = "TIPO", nullable = false, length = 50)
   private String tipo;
+
   @ManyToMany(mappedBy = "plataformaCollection")
   private Collection<Videojuego> videojuegoCollection;
+
   @OneToMany(mappedBy = "nombrePlataforma")
   private Collection<Videojuego> videojuegoCollection1;
 

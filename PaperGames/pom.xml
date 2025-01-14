@@ -64,4 +64,5 @@
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>accdat.papergames.PaperGames</exec.mainClass>
     </properties>
+    <name>ACCDAT2-5-2425</name>
 </project>
