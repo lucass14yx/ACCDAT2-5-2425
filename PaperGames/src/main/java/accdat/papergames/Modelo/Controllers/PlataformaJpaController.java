@@ -4,8 +4,6 @@
  */
 package accdat.papergames.Modelo.Controllers;
 
-import accdat.papergames.Modelo.Controllers.exceptions.NonexistentEntityException;
-import accdat.papergames.Modelo.Controllers.exceptions.PreexistingEntityException;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import java.io.Serializable;
 import jakarta.persistence.Query;
@@ -13,6 +11,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
+import accdat.papergames.exceptions.NonexistentEntityException;
+import accdat.papergames.exceptions.PreexistingEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;

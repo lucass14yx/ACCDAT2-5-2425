@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package accdat.papergames.Modelo;
+package accdat.papergames.Modelo.Filtros;
 
 import accdat.papergames.Modelo.Controllers.DlcJpaController;
 import accdat.papergames.Modelo.Controllers.VideojuegoJpaController;
@@ -30,7 +30,7 @@ public class FiltrosJPAController {
  
  //------------------------------------------------------------------------------->
    // constructores ->
-  private FiltrosJPAController () {
+  public FiltrosJPAController () {
     emFactory = Persistence.createEntityManagerFactory("accdat_PaperGames_jar_1.0-SNAPSHOTPU");
     videojuegoController = new VideojuegoJpaController(emFactory);
     dlcController = new DlcJpaController(emFactory);
@@ -68,7 +68,7 @@ public class FiltrosJPAController {
   public List<Videojuego> consultaVideojuegoPorAnio (Integer inputAnioMin, Integer inputAnioMax) {
     List<Videojuego> listaVideojuegos = new ArrayList<>();
     try {
-      listaVideojuegos = videojuegoController.findVideojuegoByAnio(inputAnioMin, inputAnioMax);
+      listaVideojuegos = videojuegoController.findVideojuegoByAnioPublicacionRange(inputAnioMin, inputAnioMax);
     } catch (Exception ex) {
       ex.printStackTrace();
       listaVideojuegos = null;
@@ -130,7 +130,7 @@ public class FiltrosJPAController {
   public List<Dlc> consultaDLCPorNombre (String inputNombreDLC) {
     List<Dlc> listaDlc = new ArrayList<>();
     try {
-      listaDlc = dlcController.findDlcByTitulo(inputNombreDLC);
+      listaDlc = dlcController.findDLCByNombre(inputNombreDLC);
     } catch (Exception ex) {
       ex.printStackTrace();
       listaDlc = null;
@@ -145,7 +145,7 @@ public class FiltrosJPAController {
   public List<Dlc> consultaDLCPorPrecio (Integer inputPrecioMin, Integer inputPrecioMax) {
     List<Dlc> listaDlc = new ArrayList<>();
     try {
-      listaDlc = dlcController.findDlcByPrecio(inputPrecioMin, inputPrecioMax);
+      listaDlc = dlcController.findDLCByPrecioRange(inputPrecioMin, inputPrecioMax);
     } catch (Exception ex) {
       ex.printStackTrace();
       listaDlc = null;

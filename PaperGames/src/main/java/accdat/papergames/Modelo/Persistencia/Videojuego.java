@@ -20,6 +20,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -29,6 +31,7 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "VIDEOJUEGO")
+@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Videojuego.findAll", query = "SELECT v FROM Videojuego v"),
   @NamedQuery(name = "Videojuego.findByIdVideojuego", query = "SELECT v FROM Videojuego v WHERE v.idVideojuego = :idVideojuego"),
@@ -132,6 +135,7 @@ public class Videojuego implements Serializable {
     this.pegi = pegi;
   }
 
+  @XmlTransient
   public Collection<Plataforma> getPlataformaCollection() {
     return plataformaCollection;
   }
@@ -140,6 +144,7 @@ public class Videojuego implements Serializable {
     this.plataformaCollection = plataformaCollection;
   }
 
+  @XmlTransient
   public Collection<ModoJuego> getModoJuegoCollection() {
     return modoJuegoCollection;
   }
@@ -164,6 +169,7 @@ public class Videojuego implements Serializable {
     this.nombrePlataforma = nombrePlataforma;
   }
 
+  @XmlTransient
   public Collection<Dlc> getDlcCollection() {
     return dlcCollection;
   }
@@ -194,7 +200,7 @@ public class Videojuego implements Serializable {
 
   @Override
   public String toString() {
-    return "accdat.papergames.Modelo.Persistencia.Videojuego[ Titulo=" + titulo + " ]";
+    return "accdat.papergames.Modelo.Persistencia.Videojuego[ idVideojuego=" + idVideojuego + " ]";
   }
   
 }

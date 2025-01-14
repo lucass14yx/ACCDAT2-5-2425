@@ -16,6 +16,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -25,6 +26,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "DLC")
+@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Dlc.findAll", query = "SELECT d FROM Dlc d"),
   @NamedQuery(name = "Dlc.findByIdDlc", query = "SELECT d FROM Dlc d WHERE d.idDlc = :idDlc"),

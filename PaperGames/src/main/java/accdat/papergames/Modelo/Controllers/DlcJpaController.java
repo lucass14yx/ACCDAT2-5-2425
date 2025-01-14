@@ -5,7 +5,6 @@
 package accdat.papergames.Modelo.Controllers;
 
 import accdat.papergames.Modelo.Controllers.exceptions.NonexistentEntityException;
-import accdat.papergames.Modelo.Controllers.exceptions.PreexistingEntityException;
 import accdat.papergames.Modelo.Persistencia.Dlc;
 import java.io.Serializable;
 import jakarta.persistence.Query;
@@ -16,7 +15,6 @@ import accdat.papergames.Modelo.Persistencia.Videojuego;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Predicate;
 import java.util.List;
 
 /**
@@ -34,7 +32,7 @@ public class DlcJpaController implements Serializable {
     return emf.createEntityManager();
   }
 
-  public void create(Dlc dlc) throws PreexistingEntityException, Exception {
+  public void create(Dlc dlc) {
     EntityManager em = null;
     try {
       em = getEntityManager();
@@ -50,11 +48,6 @@ public class DlcJpaController implements Serializable {
         idVideojuego = em.merge(idVideojuego);
       }
       em.getTransaction().commit();
-    } catch (Exception ex) {
-      if (findDlc(dlc.getIdDlc()) != null) {
-        throw new PreexistingEntityException("Dlc " + dlc + " already exists.", ex);
-      }
-      throw ex;
     } finally {
       if (em != null) {
         em.close();
@@ -172,39 +165,26 @@ public class DlcJpaController implements Serializable {
     }
   }
   
-  public List<Dlc> findDlcByTitulo(String titulo) {
+  public List<Dlc> findDLCByNombre(String nombre) {
     EntityManager em = getEntityManager();
-    try {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Dlc> cq = cb.createQuery(Dlc.class);
-      Root<Dlc> root = cq.from(Dlc.class);
-      cq.select(root).where(cb.like(root.get("titulo"), "%" + titulo + "%"));
-      return em.createQuery(cq).getResultList();
-    } finally {
-      em.close();
-    }
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Dlc> consulta = cBuilder.createQuery(Dlc.class);
+    Root<Dlc> rootQuery = consulta.from(Dlc.class);
+
+    consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("nombre"), "%" + nombre + "%"));
+
+    return em.createQuery(consulta).getResultList();
   }
 
-  public List<Dlc> findDlcByPrecio(Integer precioMin, Integer precioMax) {
+  public List<Dlc> findDLCByPrecioRange(double precioMin, double precioMax) {
     EntityManager em = getEntityManager();
-    try {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Dlc> cq = cb.createQuery(Dlc.class);
-      Root<Dlc> root = cq.from(Dlc.class);
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Dlc> consulta = cBuilder.createQuery(Dlc.class);
+    Root<Dlc> rootQuery = consulta.from(Dlc.class);
 
-      Predicate predicate = cb.conjunction();
-      if (precioMin != null) {
-          predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("precio"), precioMin));
-      }
-      if (precioMax != null) {
-          predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("precio"), precioMax));
-      }
+    consulta.select(rootQuery).where(cBuilder.between(rootQuery.get("precio"), precioMin, precioMax));
 
-      cq.select(root).where(predicate);
-      return em.createQuery(cq).getResultList();
-    } finally {
-      em.close();
-    }
+    return em.createQuery(consulta).getResultList();
   }
-  
+
 }
