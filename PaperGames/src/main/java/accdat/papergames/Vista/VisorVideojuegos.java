@@ -220,6 +220,7 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     this.titulo = baseVideojuego.getTitulo();
     this.descripcion = baseVideojuego.getDescripcion();
     this.anioSalida = baseVideojuego.getAño();
+    this.pegi = baseVideojuego.getPegi();
     this.genero = baseVideojuego.getNombreGenero().getNombreGenero();
     this.listaDLC = extraerNombreListaDLC(baseVideojuego.getDlcCollection());
     this.listaModosJuego = extraerNombreModosJuego(baseVideojuego.getModoJuegoCollection());
@@ -233,7 +234,7 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     vGenero.setText(this.genero);
     vDescripcion.setText(this.descripcion);
     vAnioSalida.setText(Integer.toString(this.anioSalida));
-    vPEGI.setText(Integer.toString(this.pegi));
+    vPEGI.setText("PEGI " + Integer.toString(this.pegi));
     vListaDLCs.setListData(this.listaDLC.toArray(new String[listaDLC.size()]));
     vListaModoJuego.setListData(this.listaModosJuego.toArray(new String[listaModosJuego.size()]));
     jListaPlataforma.setListData(this.listaPlataformas.toArray(new String[listaPlataformas.size()]));
