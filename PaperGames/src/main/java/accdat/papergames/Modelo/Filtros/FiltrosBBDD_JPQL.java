@@ -2,12 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package accdat.papergames.Modelo;
+package accdat.papergames.Modelo.Filtros;
 
 import accdat.papergames.Modelo.Persistencia.Dlc;
+import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -28,7 +30,7 @@ public class FiltrosBBDD_JPQL {
   
  //------------------------------------------------------------------------------->
    // constructores ->
-  private FiltrosBBDD_JPQL () {}
+  public FiltrosBBDD_JPQL () {}
   public static FiltrosBBDD_JPQL getInstance () {
     if (instace == null) {
       instace = new FiltrosBBDD_JPQL();
@@ -57,7 +59,7 @@ public class FiltrosBBDD_JPQL {
     Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
     
     consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("titulo"), "%" + inputTitulo + "%"));
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).getResultList();
+    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
     return listaVideojuegos;
   }
   
@@ -76,7 +78,7 @@ public class FiltrosBBDD_JPQL {
     }
     
     consulta.select(rootQuery).where(filtro);
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).getResultList();
+    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
     return listaVideojuegos;
   }
   
@@ -93,11 +95,11 @@ public class FiltrosBBDD_JPQL {
     subquery.select(subRoot.get("idVideojuego"))
             .where(subRoot.get("idVideojuego").in(
             entityManager.createQuery("SELECT DISTINCT vp.id_videojuego FROM VIDEOJUEGO_PLATAFORMAS vp WHERE vp.nombre_plataforma IN :plataformas", Long.class)
-                    .setParameter("plataformas", inputPlataformas).getResultList()
+                    .setParameter("plataformas", inputPlataformas).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList()
             ));
     
     consulta.select(rootVideoJuego).where(rootVideoJuego.get("idVideojuego").in(subquery));
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).getResultList();
+    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
     return listaVideojuegos;
   }
   
@@ -112,11 +114,11 @@ public class FiltrosBBDD_JPQL {
     
     subquery.select(subRoot.get("idVideojuego")).where(subRoot.get("idVideojuego").in(
             entityManager.createQuery("SELECT DISTINCT vmj.id_videojuego FROM VIDEOJUEGO_MODO_JUEGO vmj WHERE vmj.nombre_modo_juego IN :modosjuego", Long.class)
-            .setParameter("modosjuego", inputModosJuego).getResultList()
+            .setParameter("modosjuego", inputModosJuego).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList()
     ));
     
     consulta.select(rootVideoJuego).where(rootVideoJuego.get("idVideojuego").in(subquery));
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).getResultList();
+    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
     return listaVideojuegos;
   }
   
@@ -127,7 +129,7 @@ public class FiltrosBBDD_JPQL {
     Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
     
     consulta.select(rootQuery).where(rootQuery.get("pegi").in(inputPEGI));
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).getResultList();
+    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
     return listaVideojuegos;
   }
   
@@ -140,7 +142,7 @@ public class FiltrosBBDD_JPQL {
     Root<Dlc> rootQuery = consulta.from(Dlc.class);
     
     consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("titulo"), "%" + inputNombreDLC + "%"));
-    List<Dlc> listaDLC = entityManager.createQuery(consulta).getResultList();
+    List<Dlc> listaDLC = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
     return listaDLC;
   }
   
@@ -160,7 +162,75 @@ public class FiltrosBBDD_JPQL {
     }
     
     consulta.select(rootQuery).where(filtro);
-    List<Dlc> listaDLC = entityManager.createQuery(consulta).getResultList();
+    List<Dlc> listaDLC = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
     return listaDLC;
+  }
+  
+ //----------------------------------------------------------------------------------------->
+   // metodos complementarios ->
+    // metodo complementario | actualizarAñoVideojuegoPorAño =>
+  public int actualizarAnioVideojuegoPorAnio (int inputAnioActual, int inputAnioNuevo) {
+    abrirFactory();
+    entityManager.getTransaction().begin();
+    
+    int actualizados = entityManager.createQuery(
+            "UPDATE Videojuego v SET v.año = :nuevoAÑO WHERE v.año = :actualAÑO"
+    ).setParameter("nuevoAÑO", inputAnioNuevo).setParameter("actualAÑO", inputAnioActual).executeUpdate();
+    
+    entityManager.getTransaction().commit();
+    cerrarFactory();
+    return actualizados;
+  }
+  
+    // metodo complementario | reasignarVideojuegosDePlataformas =>
+  public int reasignarVideojuegosDePlataformas (String inputNombrePlataformaEliminar) {
+    abrirFactory();
+    entityManager.getTransaction().begin();
+    
+    int numRegistrosActualizados = 0;
+    
+    try {
+      String plataformaNoAsignada = "No Asignada";
+      Long idPlataformaNoAsignada = null;
+      
+      List<Long> plataformasNoAsignadas = entityManager.createQuery(
+              "SELECT p.id FROM Plataforma p WHERE p.nombre = :nombre", Long.class
+      ).setParameter("nombre", inputNombrePlataformaEliminar).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
+      
+      if (plataformasNoAsignadas.isEmpty()) {
+        Plataforma nuevaPlataforma = new Plataforma();
+        nuevaPlataforma.setNombrePlataforma(plataformaNoAsignada);
+        entityManager.persist(nuevaPlataforma);
+        entityManager.flush();
+        idPlataformaNoAsignada = plataformasNoAsignadas.get(0);
+      } else {
+        idPlataformaNoAsignada = plataformasNoAsignadas.get(0);
+      }
+      
+      List<Videojuego> videojuegos = entityManager.createQuery(
+              "SELECT v FROM Videojuego v WHERE v.plataforma.nombre = :plataformaEliminar", Videojuego.class
+      ).setParameter("plataformaEliminar", inputNombrePlataformaEliminar).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
+    
+      int actualizados = entityManager.createQuery(
+              "UPDATE Videojuego v SET v.plataforma.id = :nuevaPlataformaId WHERE v.plataforma.nombre = :plataformaEliminar"
+      )
+      .setParameter("nuevaPlataformaId", idPlataformaNoAsignada)
+        .setParameter("plataformaEliminar", inputNombrePlataformaEliminar)
+        .executeUpdate();
+      
+      entityManager.createQuery(
+              "DELETE FROM Plataforma p WHERE p.nombre = :plataformaEliminar"
+      ).setParameter("plataformaEliminar", inputNombrePlataformaEliminar).executeUpdate();
+      
+      entityManager.getTransaction().commit();
+      numRegistrosActualizados = actualizados;
+    } catch (Exception ex) {
+      entityManager.getTransaction().rollback();
+      ex.printStackTrace();
+    } finally {
+      cerrarFactory();
+    }
+    
+    return numRegistrosActualizados;
   }
 }

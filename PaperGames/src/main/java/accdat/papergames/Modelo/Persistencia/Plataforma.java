@@ -15,6 +15,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -24,6 +26,7 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "PLATAFORMA")
+@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Plataforma.findAll", query = "SELECT p FROM Plataforma p"),
   @NamedQuery(name = "Plataforma.findByNombrePlataforma", query = "SELECT p FROM Plataforma p WHERE p.nombrePlataforma = :nombrePlataforma"),
@@ -75,6 +78,7 @@ public class Plataforma implements Serializable {
     this.tipo = tipo;
   }
 
+  @XmlTransient
   public Collection<Videojuego> getVideojuegoCollection() {
     return videojuegoCollection;
   }
@@ -83,6 +87,7 @@ public class Plataforma implements Serializable {
     this.videojuegoCollection = videojuegoCollection;
   }
 
+  @XmlTransient
   public Collection<Videojuego> getVideojuegoCollection1() {
     return videojuegoCollection1;
   }

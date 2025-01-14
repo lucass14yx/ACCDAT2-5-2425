@@ -5,7 +5,7 @@
 package accdat.papergames.Vista;
 
 import accdat.papergames.Controlador.Controlador;
-import javax.swing.JFrame;
+import accdat.papergames.Modelo.HelperOperaciones;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,10 +28,10 @@ public class VentanaPrincipalGUI extends JFrame implements InterfazVista{
      * Creates new form VentanaPrincipalGUI
      */
     public VentanaPrincipalGUI() {
-        initComponents();
-        jButton1.setActionCommand(PRUEBA1);
-        jButton2.setActionCommand(PRUEBA2);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+      initComponents();
+      jButton1.setActionCommand(FILTRO_BUSQUEDA_NOMBRE);
+      jButton2.setActionCommand(FILTRO_SELECT_MODO_JUEGO);
+      setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -52,7 +52,6 @@ public class VentanaPrincipalGUI extends JFrame implements InterfazVista{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new Color(200, 212, 227, 128));
-
         jPanel3.setBackground(new Color(221, 160, 221, 84));
         jPanel3.setFont(comfortaaFont);
 
@@ -137,7 +136,7 @@ public class VentanaPrincipalGUI extends JFrame implements InterfazVista{
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 VentanaPrincipalGUI ventana = new VentanaPrincipalGUI();
-                List<Videojuego> listaV = obtenerListaDeVideojuegos();
+                List<Videojuego> listaV = HelperOperaciones.getInstance().devolverListaVideojuegos();
                 ventana.agregarVisores(listaV);
                 ventana.setVisible(true);
             }
@@ -152,9 +151,10 @@ public class VentanaPrincipalGUI extends JFrame implements InterfazVista{
 
     @Override
     public void arranca() {
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
+      
+      pack();
+      setLocationRelativeTo(null);
+      setVisible(true);
     }
 
     public void agregarVisores(List<Videojuego> inputListaVideojuegos) {
@@ -172,17 +172,6 @@ public class VentanaPrincipalGUI extends JFrame implements InterfazVista{
         jVisorVideojuego.repaint();
     }
 
-    private static List<Videojuego> obtenerListaDeVideojuegos() {
-        List<Videojuego> videojuegos = new ArrayList<>();
-        videojuegos.add(new Videojuego(Long.valueOf(0), "Titulo1", (short) 2020, (short) 13));
-        videojuegos.add(new Videojuego(Long.valueOf(1), "Titulo2", (short) 2024, (short) 18));
-        videojuegos.add(new Videojuego(Long.valueOf(1), "Titulo2", (short) 2024, (short) 18));
-        videojuegos.add(new Videojuego(Long.valueOf(1), "Titulo2", (short) 2024, (short) 18));
-        videojuegos.add(new Videojuego(Long.valueOf(1), "Titulo2", (short) 2024, (short) 18));
-        
-        return videojuegos;
-    }
-
     @Override
     public void haceAlgo(String s) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -194,4 +183,19 @@ public class VentanaPrincipalGUI extends JFrame implements InterfazVista{
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jVisorVideojuego;
+
+  @Override
+  public List<String> obtenerPlataformasSelected() {
+    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+  }
+
+  @Override
+  public List<String> obtenerModosJuegoSelected() {
+    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+  }
+
+  @Override
+  public List<Integer> obtenerPEGISelected() {
+    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+  }
 }

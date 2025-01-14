@@ -4,9 +4,6 @@
  */
 package accdat.papergames.Modelo.Controllers;
 
-import accdat.papergames.Modelo.Controllers.exceptions.IllegalOrphanException;
-import accdat.papergames.Modelo.Controllers.exceptions.NonexistentEntityException;
-import accdat.papergames.Modelo.Controllers.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,10 +16,12 @@ import java.util.Collection;
 import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Dlc;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
+import accdat.papergames.exceptions.IllegalOrphanException;
+import accdat.papergames.exceptions.NonexistentEntityException;
+import accdat.papergames.exceptions.PreexistingEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Predicate;
 import java.util.List;
 
 /**
@@ -345,75 +344,58 @@ public class VideojuegoJpaController implements Serializable {
     }
   }
   
-  public List<Videojuego> findVideojuegoByTitulo(String titulo) {
+    public List<Videojuego> findVideojuegoByTitulo(String nombre) {
     EntityManager em = getEntityManager();
-    try {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Videojuego> cq = cb.createQuery(Videojuego.class);
-      Root<Videojuego> root = cq.from(Videojuego.class);
-      cq.select(root).where(cb.like(root.get("titulo"), "%" + titulo + "%"));
-      return em.createQuery(cq).getResultList();
-    } finally {
-      em.close();
-    }
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+
+    consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("nombre"), "%" + nombre + "%"));
+
+    return em.createQuery(consulta).getResultList();
   }
   
-  public List<Videojuego> findVideojuegoByAnio(Integer anioMin, Integer anioMax) {
+  public List<Videojuego> findVideojuegoByAnioPublicacionRange(int anioMin, int anioMax) {
     EntityManager em = getEntityManager();
-    try {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Videojuego> cq = cb.createQuery(Videojuego.class);
-      Root<Videojuego> root = cq.from(Videojuego.class);
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
 
-      Predicate predicate = cb.conjunction();
-      if (anioMin != null) {
-        predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("anio"), anioMin));
-      }
-      if (anioMax != null) {
-        predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("anio"), anioMax));
-      }
+    consulta.select(rootQuery).where(cBuilder.between(rootQuery.get("anioPublicacion"), anioMin, anioMax));
 
-      cq.select(root).where(predicate);
-      return em.createQuery(cq).getResultList();
-    } finally {
-      em.close();
-    }
+    return em.createQuery(consulta).getResultList();
   }
 
   public List<Videojuego> findVideojuegoByPlataformas(List<String> plataformas) {
     EntityManager em = getEntityManager();
-    try {
-      return em.createQuery(
-              "SELECT v FROM Videojuego v JOIN v.plataformaCollection p WHERE p.nombrePlataforma IN :plataformas", Videojuego.class)
-              .setParameter("plataformas", plataformas)
-              .getResultList();
-    } finally {
-      em.close();
-    }
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+
+    consulta.select(rootQuery).where(rootQuery.get("plataforma").in(plataformas));
+
+    return em.createQuery(consulta).getResultList();
+  }
+
+  public List<Videojuego> findVideojuegoByPEGI(List<Integer> listaPegi) {
+    EntityManager em = getEntityManager();
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+
+    consulta.select(rootQuery).where(rootQuery.get("pegi").in(listaPegi));
+
+    return em.createQuery(consulta).getResultList();
   }
 
   public List<Videojuego> findVideojuegoByModosJuego(List<String> modosJuego) {
     EntityManager em = getEntityManager();
-    try {
-      return em.createQuery(
-              "SELECT v FROM Videojuego v JOIN v.modoJuegoCollection m WHERE m.nombreModoJuego IN :modosJuego", Videojuego.class)
-              .setParameter("modosJuego", modosJuego)
-              .getResultList();
-    } finally {
-      em.close();
-    }
-  }
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
 
-  public List<Videojuego> findVideojuegoByPEGI(List<Integer> pegiRatings) {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Videojuego> cq = cb.createQuery(Videojuego.class);
-      Root<Videojuego> root = cq.from(Videojuego.class);
-      cq.select(root).where(root.get("pegi").in(pegiRatings));
-      return em.createQuery(cq).getResultList();
-    } finally {
-      em.close();
-    }
+    consulta.select(rootQuery).where(rootQuery.get("modoJuego").in(modosJuego));
+
+    return em.createQuery(consulta).getResultList();
   }
 }
