@@ -9,7 +9,6 @@ import accdat.papergames.Modelo.HelperOperaciones;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.Font;
 import javax.swing.JFrame;
