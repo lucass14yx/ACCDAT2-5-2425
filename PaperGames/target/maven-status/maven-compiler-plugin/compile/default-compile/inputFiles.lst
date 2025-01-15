@@ -1,4 +1,12 @@
+<<<<<<< Updated upstream
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Controlador\Controlador.java
+=======
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\CollectData.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Controlador\Controlador.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\exceptions\IllegalOrphanException.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\exceptions\NonexistentEntityException.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\exceptions\PreexistingEntityException.java
+>>>>>>> Stashed changes
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Controllers\DlcJpaController.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Controllers\exceptions\IllegalOrphanException.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Controllers\exceptions\NonexistentEntityException.java
@@ -7,11 +15,18 @@ C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Controllers\ModoJuegoJpaController.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Controllers\PlataformaJpaController.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Controllers\VideojuegoJpaController.java
+<<<<<<< Updated upstream
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\FiltrosBBDD_JPQL.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\FiltrosJPAController.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Modelo.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\ModeloService.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\ModeloServiceTester.java
+=======
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Filtros\FiltrosBBDD_JPQL.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Filtros\FiltrosJPAController.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\HelperOperaciones.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\ModeloService.java
+>>>>>>> Stashed changes
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Persistencia\Dlc.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Persistencia\Genero.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Persistencia\ModoJuego.java
@@ -19,4 +34,11 @@ C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Modelo\Persistencia\Videojuego.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\PaperGames.java
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Vista\InterfazVista.java
+<<<<<<< Updated upstream
 C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Vista\VentanaPrincipalGUI.java
+=======
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Vista\VentanaItem.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Vista\VentanaPrincipal.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Vista\VentanaPrincipalGUI.java
+C:\Users\USUARIO\Desktop\DAM2repos\papergames\ACCDAT2-5-2425\PaperGames\src\main\java\accdat\papergames\Vista\VisorVideojuegos.java
+>>>>>>> Stashed changes
