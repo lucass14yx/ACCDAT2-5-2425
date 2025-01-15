@@ -27,6 +27,7 @@ public interface InterfazVista {
   void arranca();
     
   void haceAlgo(String s);
+  List<String> obtenerGenerosSelected ();
   List<String> obtenerPlataformasSelected ();
   List<String> obtenerModosJuegoSelected ();
   List<Integer> obtenerPEGISelected ();

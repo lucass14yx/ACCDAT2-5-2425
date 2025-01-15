@@ -9,11 +9,13 @@ import accdat.papergames.Modelo.Filtros.FiltrosJPAController;
 import accdat.papergames.Modelo.HelperOperaciones;
 import accdat.papergames.Modelo.ModeloService;
 import accdat.papergames.Modelo.Persistencia.Genero;
+import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import accdat.papergames.Vista.InterfazVista;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -71,11 +73,52 @@ public class Controlador implements ActionListener{
   public List<Videojuego> cargarVideojuegos () {
     return this.modeloOperaciones.devolverListaVideojuegos();
   }
+  public List<String> cargarNombresVideojuegos () {
+    List<String> listaVideojuegos = new ArrayList<>();
+    for (Videojuego aux : cargarVideojuegos()) {
+      listaVideojuegos.add(aux.getTitulo());
+    }
+    
+    
+    return listaVideojuegos;
+  }
+  
+    // metodo | cargarPlataformas ->
   public List<Plataforma> cargarPlataformas () {
     return this.modeloOperaciones.devolverListaPlataformas();
   }
+  public List<String> cargarNombresPlataformas () {
+    List<String> listaPlataformas = new ArrayList<>();
+    for (Plataforma aux : cargarPlataformas()) {
+      listaPlataformas.add(aux.getNombrePlataforma());
+    }
+      
+    return listaPlataformas;
+  }
+  
+    // metodo | cargarGeneros ->
   public List<Genero> cargarGeneros () {
     return this.modeloOperaciones.devolverListaGeneros();
   }
-   
+  public List<String> cargarNombresGeneros () {
+    List<String> listaGeneros = new ArrayList<>();
+    for (Genero aux : cargarGeneros()) {
+      listaGeneros.add(aux.getNombreGenero());
+    }
+    
+    return listaGeneros;
+  }
+  
+    // metodo | cargarModosJuego ->
+  public List<ModoJuego> cargarModosJuego () {
+    return this.modeloOperaciones.devolverListaModosJuego();
+  }
+  public List<String> cargarNombresModoJuego () {
+    List<String> listaModosJuego = new ArrayList<>();
+    for (ModoJuego aux : cargarModosJuego()) {
+      listaModosJuego.add(aux.getNombreModoJuego());
+    }
+    
+    return listaModosJuego;
+  }
 }

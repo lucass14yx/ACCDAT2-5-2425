@@ -5,11 +5,13 @@
 package accdat.papergames.Modelo;
 
 import accdat.papergames.Modelo.Controllers.GeneroJpaController;
+import accdat.papergames.Modelo.Controllers.ModoJuegoJpaController;
 import accdat.papergames.Modelo.Controllers.PlataformaJpaController;
 import accdat.papergames.Modelo.Controllers.VideojuegoJpaController;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Genero;
+import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class HelperOperaciones {
   private VideojuegoJpaController vController;
   private PlataformaJpaController pController;
   private GeneroJpaController gController;
+  private ModoJuegoJpaController mjController;
   
  //----------------------------------------------------------------------------------------->
    // constructores -> 
@@ -37,6 +40,7 @@ public class HelperOperaciones {
     vController = new VideojuegoJpaController(emFactory);
     pController = new PlataformaJpaController(emFactory);
     gController = new GeneroJpaController(emFactory);
+    mjController = new ModoJuegoJpaController(emFactory);
   }
   public static HelperOperaciones getInstance () {
     if (instance == null) {
@@ -91,5 +95,19 @@ public class HelperOperaciones {
     }
     
     return listaCompletaGeneros;
+  }
+  
+    // metodo publico | devolverListaModosJuego =>
+  public List<ModoJuego> devolverListaModosJuego () {
+    List<ModoJuego> listaCompletaModosJuego = new ArrayList<>();
+    try {
+      listaCompletaModosJuego = mjController.findModoJuegoEntities();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    } finally {
+      cerrarConexion();
+    }
+    
+    return listaCompletaModosJuego;
   }
 }
