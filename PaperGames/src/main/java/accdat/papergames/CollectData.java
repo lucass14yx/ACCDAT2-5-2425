@@ -27,7 +27,6 @@ import java.util.List;
 public class CollectData {
    // constantes & variables ->
     // entityManager =>
-  
   EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("accdat_PaperGames_jar_1.0-SNAPSHOTPU");
   
     // controladores persistencia =>
