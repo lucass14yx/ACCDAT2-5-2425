@@ -1,6 +1,9 @@
 accdat/papergames/Modelo/HelperOperaciones.class
 accdat/papergames/exceptions/NonexistentEntityException.class
+accdat/papergames/CollectData.class
 accdat/papergames/exceptions/IllegalOrphanException.class
+accdat/papergames/Vista/VentanaPrincipal.class
 accdat/papergames/Modelo/Filtros/FiltrosBBDD_JPQL.class
+accdat/papergames/Vista/VentanaPrincipal$1.class
 accdat/papergames/exceptions/PreexistingEntityException.class
 accdat/papergames/Modelo/Filtros/FiltrosJPAController.class
