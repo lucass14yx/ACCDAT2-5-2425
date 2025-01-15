@@ -20,6 +20,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -29,6 +31,7 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "VIDEOJUEGO")
+@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Videojuego.findAll", query = "SELECT v FROM Videojuego v"),
   @NamedQuery(name = "Videojuego.findByIdVideojuego", query = "SELECT v FROM Videojuego v WHERE v.idVideojuego = :idVideojuego"),
@@ -43,38 +46,47 @@ public class Videojuego implements Serializable {
   @NotNull
   @Column(name = "ID_VIDEOJUEGO")
   private Long idVideojuego;
+
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 200)
-  @Column(name = "TITULO")
+  @Size(min = 1, max = 200) // Tamaño máximo de 200 caracteres
+  @Column(name = "TITULO", nullable = false, length = 200)
   private String titulo;
+
   @Lob
   @Column(name = "DESCRIPCION")
   private String descripcion;
+
   @Basic(optional = false)
   @NotNull
-  @Column(name = "A\u00d1O")
+  @Column(name = "AÑO", nullable = false)
   private short año;
+
   @Basic(optional = false)
   @NotNull
-  @Column(name = "PEGI")
+  @Column(name = "PEGI", nullable = false)
   private short pegi;
+
   @JoinTable(name = "VIDEOJUEGO_PLATAFORMAS", joinColumns = {
-    @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
-    @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")})
+      @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
+      @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")})
   @ManyToMany
   private Collection<Plataforma> plataformaCollection;
+
   @JoinTable(name = "VIDEOJUEGO_MODO_JUEGO", joinColumns = {
-    @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
-    @JoinColumn(name = "NOMBRE_MODO_JUEGO", referencedColumnName = "NOMBRE_MODO_JUEGO")})
+      @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {
+      @JoinColumn(name = "NOMBRE_MODO_JUEGO", referencedColumnName = "NOMBRE_MODO_JUEGO")})
   @ManyToMany
   private Collection<ModoJuego> modoJuegoCollection;
+
   @JoinColumn(name = "NOMBRE_GENERO", referencedColumnName = "NOMBRE_GENERO")
   @ManyToOne
   private Genero nombreGenero;
+
   @JoinColumn(name = "NOMBRE_PLATAFORMA", referencedColumnName = "NOMBRE_PLATAFORMA")
   @ManyToOne
   private Plataforma nombrePlataforma;
+
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "idVideojuego")
   private Collection<Dlc> dlcCollection;
 
@@ -132,6 +144,7 @@ public class Videojuego implements Serializable {
     this.pegi = pegi;
   }
 
+  @XmlTransient
   public Collection<Plataforma> getPlataformaCollection() {
     return plataformaCollection;
   }
@@ -140,6 +153,7 @@ public class Videojuego implements Serializable {
     this.plataformaCollection = plataformaCollection;
   }
 
+  @XmlTransient
   public Collection<ModoJuego> getModoJuegoCollection() {
     return modoJuegoCollection;
   }
@@ -164,6 +178,7 @@ public class Videojuego implements Serializable {
     this.nombrePlataforma = nombrePlataforma;
   }
 
+  @XmlTransient
   public Collection<Dlc> getDlcCollection() {
     return dlcCollection;
   }

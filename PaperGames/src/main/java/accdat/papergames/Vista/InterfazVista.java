@@ -5,17 +5,29 @@
 package accdat.papergames.Vista;
 
 import accdat.papergames.Controlador.Controlador;
+import accdat.papergames.Modelo.Persistencia.Plataforma;
+import accdat.papergames.Modelo.Persistencia.Videojuego;
+import java.util.List;
 
 /**
  *
  * @author USUARIO
  */
 public interface InterfazVista {
-    void setControlador(Controlador c);
-    void arranca();
+   // constantes & atributos ->
+  static final String FILTRO_BUSQUEDA_NOMBRE = "filtro de campo de busqueda para el nombre";
+  static final String FILTRO_ANIO_PUBLICACION = "filtro para minimo y maximo de anio de publicacion";
+  static final String FILTRO_SELECT_PLATAFORMA = "filtro de seleccionar plataforma";
+  static final String FILTRO_SELECT_PEGI = "filtro de seleccionar el pegi";
+  static final String FILTRO_SELECT_MODO_JUEGO = "filtro de seleccionar el modo de juego";
+  
+ //-------------------------------------------------------------------------------------------------------------------->
+  void agregarVisores(List<Videojuego> inputListaVideojuegos);  
+  void setControlador(Controlador c);
+  void arranca();
     
-    void haceAlgo(String s);
-
-    static final String PRUEBA1 = "Prueba1";
-    static final String PRUEBA2 = "Prueba2";
+  void haceAlgo(String s);
+  List<String> obtenerPlataformasSelected ();
+  List<String> obtenerModosJuegoSelected ();
+  List<Integer> obtenerPEGISelected ();
 }

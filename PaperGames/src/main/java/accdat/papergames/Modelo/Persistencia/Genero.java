@@ -14,6 +14,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -23,21 +25,22 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "GENERO")
+@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Genero.findAll", query = "SELECT g FROM Genero g"),
   @NamedQuery(name = "Genero.findByNombreGenero", query = "SELECT g FROM Genero g WHERE g.nombreGenero = :nombreGenero")})
 public class Genero implements Serializable {
-
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
   @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "NOMBRE_GENERO")
+  @Size(min = 1, max = 100) // Refleja el tamaño máximo definido en el script SQL
+  @Column(name = "NOMBRE_GENERO", nullable = false, length = 100)
   private String nombreGenero;
+
   @OneToMany(mappedBy = "nombreGenero")
   private Collection<Videojuego> videojuegoCollection;
-
+    
   public Genero() {
   }
 
@@ -53,6 +56,7 @@ public class Genero implements Serializable {
     this.nombreGenero = nombreGenero;
   }
 
+  @XmlTransient
   public Collection<Videojuego> getVideojuegoCollection() {
     return videojuegoCollection;
   }

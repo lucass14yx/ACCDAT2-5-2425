@@ -4,9 +4,6 @@
  */
 package accdat.papergames.Modelo.Controllers;
 
-import accdat.papergames.Modelo.Controllers.exceptions.IllegalOrphanException;
-import accdat.papergames.Modelo.Controllers.exceptions.NonexistentEntityException;
-import accdat.papergames.Modelo.Controllers.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,8 +16,12 @@ import java.util.Collection;
 import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Dlc;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
+import accdat.papergames.exceptions.IllegalOrphanException;
+import accdat.papergames.exceptions.NonexistentEntityException;
+import accdat.papergames.exceptions.PreexistingEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 /**
@@ -343,4 +344,58 @@ public class VideojuegoJpaController implements Serializable {
     }
   }
   
+    public List<Videojuego> findVideojuegoByTitulo(String nombre) {
+    EntityManager em = getEntityManager();
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+
+    consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("nombre"), "%" + nombre + "%"));
+
+    return em.createQuery(consulta).getResultList();
+  }
+  
+  public List<Videojuego> findVideojuegoByAnioPublicacionRange(int anioMin, int anioMax) {
+    EntityManager em = getEntityManager();
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+
+    consulta.select(rootQuery).where(cBuilder.between(rootQuery.get("anioPublicacion"), anioMin, anioMax));
+
+    return em.createQuery(consulta).getResultList();
+  }
+
+  public List<Videojuego> findVideojuegoByPlataformas(List<String> plataformas) {
+    EntityManager em = getEntityManager();
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+
+    consulta.select(rootQuery).where(rootQuery.get("plataforma").in(plataformas));
+
+    return em.createQuery(consulta).getResultList();
+  }
+
+  public List<Videojuego> findVideojuegoByPEGI(List<Integer> listaPegi) {
+    EntityManager em = getEntityManager();
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+
+    consulta.select(rootQuery).where(rootQuery.get("pegi").in(listaPegi));
+
+    return em.createQuery(consulta).getResultList();
+  }
+
+  public List<Videojuego> findVideojuegoByModosJuego(List<String> modosJuego) {
+    EntityManager em = getEntityManager();
+    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+
+    consulta.select(rootQuery).where(rootQuery.get("modoJuego").in(modosJuego));
+
+    return em.createQuery(consulta).getResultList();
+  }
 }
