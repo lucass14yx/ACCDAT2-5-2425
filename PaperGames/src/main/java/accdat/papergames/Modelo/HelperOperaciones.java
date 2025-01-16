@@ -110,4 +110,29 @@ public class HelperOperaciones {
     
     return listaCompletaModosJuego;
   }
+  
+    // metodo publico | devolverListaPEGIs =>
+  public List<Short> listaCompletaPEGI () {
+    List<Short> listaCompletaPEGIs = new ArrayList<>();
+    try {
+      listaCompletaPEGIs = vController.obtenerListaPEGI();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    } finally {
+      cerrarConexion();
+    }
+    
+    return listaCompletaPEGIs;
+  }
+  
+ //----------------------------------------------------------------------------------------->
+  public Genero buscarGeneroPorNombre (String inputNombreGenero) {
+    return gController.findGenero(inputNombreGenero);
+  }
+  public Plataforma buscarPlataformaPorNombre (String inputNombrePlataforma) {
+    return pController.findPlataforma(inputNombrePlataforma);
+  }
+  public ModoJuego buscarModoJuegoPorNombre (String inputNombreModoJuego) {
+    return mjController.findModoJuego(inputNombreModoJuego);
+  }
 }

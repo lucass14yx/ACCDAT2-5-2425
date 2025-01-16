@@ -6,22 +6,27 @@ package accdat.papergames.Vista;
 
 import accdat.papergames.Controlador.Controlador;
 import accdat.papergames.Modelo.Persistencia.ModoJuego;
+import accdat.papergames.Modelo.Persistencia.Videojuego;
+import java.awt.BorderLayout;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
 import java.awt.SystemColor;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 
 /**
  *
  * @author rezzt
  */
-public class VentanaPrincipal extends javax.swing.JFrame {
+public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVista {
   private Controlador controlador;
   private List<Checkbox> listaGenerosSelected = new ArrayList<>();
   private List<Checkbox> listaPlataformasSelected = new ArrayList<>();
-  private List<Integer> listaPEGISelected = new ArrayList<>();
+  private List<Checkbox> listaPEGISelected = new ArrayList<>();
   private List<Checkbox> listaModosJuegoSelected = new ArrayList<>();
   
   
@@ -31,6 +36,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
    */
   public VentanaPrincipal() {
     initComponents();
+    panelOpcionesGenero.setLayout(new java.awt.GridLayout(0,1));
+    panelOpcionesPlataforma.setLayout(new java.awt.GridLayout(0,1));
+    panelOpcionesModoJuego.setLayout(new java.awt.GridLayout(0,1));
+    panelOpcionesPEGI.setLayout(new java.awt.GridLayout(0,1));
+    
+    jVisorVideojuego.setLayout(new java.awt.GridLayout(0, 1));
+    JScrollPane scrollPaneListaVideojuegos = new JScrollPane(jVisorVideojuego);
+    scrollPaneListaVideojuegos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPaneListaVideojuegos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    
+//    cargarOpcionesGenero();
+//    cargarOpcionesModosJuego();
+//    cargarOpcionesPlataforma();
+//    cargarOpcionesPEGI();
   }
 
   /**
@@ -42,35 +61,34 @@ public class VentanaPrincipal extends javax.swing.JFrame {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    scrollPaneListaVideojuegos = new javax.swing.JScrollPane();
     panelFiltros = new javax.swing.JPanel();
     txtGenero = new javax.swing.JLabel();
     txtPlataforma = new javax.swing.JLabel();
     txtAnioPublicacion = new javax.swing.JLabel();
-    txtPrecio = new javax.swing.JLabel();
     txtPegi = new javax.swing.JLabel();
     txtModoJuego = new javax.swing.JLabel();
     panelOpcionesGenero = new javax.swing.JPanel();
     panelOpcionesPlataforma = new javax.swing.JPanel();
     panelOpcionesModoJuego = new javax.swing.JPanel();
     panelOpcionesPEGI = new javax.swing.JPanel();
+    spinnerAnioSalida = new javax.swing.JSpinner();
     btnModificar = new javax.swing.JButton();
-    btnSeleccionar = new javax.swing.JButton();
+    btnAgregarJuego = new javax.swing.JButton();
     btnEliminar = new javax.swing.JButton();
     btnBuscar = new javax.swing.JButton();
+    jVisorVideojuego = new javax.swing.JPanel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    setPreferredSize(new java.awt.Dimension(900, 800));
+    setPreferredSize(new java.awt.Dimension(1200, 800));
 
-    panelFiltros.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    panelFiltros.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+    panelFiltros.setPreferredSize(new java.awt.Dimension(190, 632));
 
     txtGenero.setText("Género");
 
     txtPlataforma.setText("Plataforma");
 
     txtAnioPublicacion.setText("Año de publicación");
-
-    txtPrecio.setText("Precio");
 
     txtPegi.setText("PEGI");
 
@@ -123,6 +141,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
       .addGap(0, 100, Short.MAX_VALUE)
     );
 
+    spinnerAnioSalida.setModel(new javax.swing.SpinnerNumberModel(2020, 2000, 2029, 1));
+
     javax.swing.GroupLayout panelFiltrosLayout = new javax.swing.GroupLayout(panelFiltros);
     panelFiltros.setLayout(panelFiltrosLayout);
     panelFiltrosLayout.setHorizontalGroup(
@@ -137,12 +157,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
           .addComponent(panelOpcionesGenero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(panelOpcionesPlataforma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(panelOpcionesModoJuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addGroup(panelFiltrosLayout.createSequentialGroup()
-            .addGap(13, 13, 13)
-            .addGroup(panelFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(txtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-              .addComponent(txtAnioPublicacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-          .addComponent(panelOpcionesPEGI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(panelOpcionesPEGI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(txtAnioPublicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+          .addComponent(spinnerAnioSalida))
         .addContainerGap())
     );
     panelFiltrosLayout.setVerticalGroup(
@@ -164,13 +181,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         .addComponent(txtPegi)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(panelOpcionesPEGI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(txtAnioPublicacion)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(txtPrecio))
+        .addComponent(spinnerAnioSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
     btnModificar.setText("Modificar");
+    btnModificar.setEnabled(false);
     btnModificar.setMaximumSize(new java.awt.Dimension(75, 30));
     btnModificar.setMinimumSize(new java.awt.Dimension(75, 30));
     btnModificar.setPreferredSize(new java.awt.Dimension(75, 30));
@@ -180,12 +199,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
       }
     });
 
-    btnSeleccionar.setText("Seleccionar");
-    btnSeleccionar.setMaximumSize(new java.awt.Dimension(75, 30));
-    btnSeleccionar.setMinimumSize(new java.awt.Dimension(75, 30));
-    btnSeleccionar.setPreferredSize(new java.awt.Dimension(75, 30));
+    btnAgregarJuego.setText("Agregar Videojuego");
+    btnAgregarJuego.setMaximumSize(new java.awt.Dimension(75, 30));
+    btnAgregarJuego.setMinimumSize(new java.awt.Dimension(75, 30));
+    btnAgregarJuego.setPreferredSize(new java.awt.Dimension(75, 30));
 
     btnEliminar.setText("Eliminar");
+    btnEliminar.setEnabled(false);
     btnEliminar.setMaximumSize(new java.awt.Dimension(75, 30));
     btnEliminar.setMinimumSize(new java.awt.Dimension(75, 30));
     btnEliminar.setPreferredSize(new java.awt.Dimension(75, 30));
@@ -195,6 +215,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     btnBuscar.setMinimumSize(new java.awt.Dimension(75, 30));
     btnBuscar.setPreferredSize(new java.awt.Dimension(75, 30));
 
+    javax.swing.GroupLayout jVisorVideojuegoLayout = new javax.swing.GroupLayout(jVisorVideojuego);
+    jVisorVideojuego.setLayout(jVisorVideojuegoLayout);
+    jVisorVideojuegoLayout.setHorizontalGroup(
+      jVisorVideojuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 708, Short.MAX_VALUE)
+    );
+    jVisorVideojuegoLayout.setVerticalGroup(
+      jVisorVideojuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
+    );
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -202,31 +233,31 @@ public class VentanaPrincipal extends javax.swing.JFrame {
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(panelFiltros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(panelFiltros, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
           .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(btnSeleccionar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(btnAgregarJuego, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(scrollPaneListaVideojuegos, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(jVisorVideojuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
+            .addContainerGap()
             .addComponent(panelFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(btnSeleccionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(btnAgregarJuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
             .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addComponent(scrollPaneListaVideojuegos))
+          .addComponent(jVisorVideojuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
 
@@ -238,15 +269,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     panelOpcionesPlataforma.setLayout(new java.awt.GridLayout(0,1));
     panelOpcionesModoJuego.setLayout(new java.awt.GridLayout(0,1));
     panelOpcionesPEGI.setLayout(new java.awt.GridLayout(0,1));
-
     
-    cargarOpcionesGenero();
-    cargarOpcionesModosJuego();
-    cargarOpcionesPlataforma();
+    jVisorVideojuego.setLayout(new java.awt.GridLayout(0, 1));
+    JScrollPane scrollPaneListaVideojuegos = new JScrollPane(jVisorVideojuego);
+    scrollPaneListaVideojuegos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPaneListaVideojuegos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+//    cargarOpcionesGenero();
+//    cargarOpcionesModosJuego();
+//    cargarOpcionesPlataforma();
+//    cargarOpcionesPEGI();
+//    controlador.rellenarDatos(this);
   }
   
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        VentanaModVideojuego ventana = new VentanaModVideojuego();
+        ventana.setControlador(this.controlador);
+        ventana.arranca();
     }//GEN-LAST:event_btnModificarActionPerformed
 
   /**
@@ -277,61 +317,120 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     //</editor-fold>
 
     /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        new VentanaPrincipal().setVisible(true);
-      }
-    });
+    
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton btnAgregarJuego;
   private javax.swing.JButton btnBuscar;
   private javax.swing.JButton btnEliminar;
   private javax.swing.JButton btnModificar;
-  private javax.swing.JButton btnSeleccionar;
+  private javax.swing.JPanel jVisorVideojuego;
   private javax.swing.JPanel panelFiltros;
   private javax.swing.JPanel panelOpcionesGenero;
   private javax.swing.JPanel panelOpcionesModoJuego;
   private javax.swing.JPanel panelOpcionesPEGI;
   private javax.swing.JPanel panelOpcionesPlataforma;
-  private javax.swing.JScrollPane scrollPaneListaVideojuegos;
+  private javax.swing.JSpinner spinnerAnioSalida;
   private javax.swing.JLabel txtAnioPublicacion;
   private javax.swing.JLabel txtGenero;
   private javax.swing.JLabel txtModoJuego;
   private javax.swing.JLabel txtPegi;
   private javax.swing.JLabel txtPlataforma;
-  private javax.swing.JLabel txtPrecio;
   // End of variables declaration//GEN-END:variables
+  
+ 
+  
  //-------------------------------------------------------------------------------------------------------------->
-  private void comprobarFiltrosSeleccionados () {
-    List<String> listaCheckboxGeneros = new ArrayList<>();
-    List<String> listaCheckBoxPlataforma = new ArrayList<>();
-    List<String> listaCheckboxModoJuego = new ArrayList<>();
+  
+  
+ //-------------------------------------------------------------------------------------------------------------->
+  
+  
+ //-------------------------------------------------------------------------------------------------------------->
+
+  @Override
+  public void agregarVisores(List<Videojuego> inputListaVideojuegos) {
+    jVisorVideojuego.removeAll();
+    for (Videojuego aux : inputListaVideojuegos) {
+      VisorVideojuegos visor = new VisorVideojuegos();
+      JPanel contenedorVisor = new JPanel(new BorderLayout());
+      contenedorVisor.setBorder(new EmptyBorder(5, 10, 5, 10));
+      visor.setBaseVideojuego(aux);
+      visor.asignacionContenidoElementGraficos();
+      contenedorVisor.add(visor);
+      jVisorVideojuego.add(contenedorVisor);
+    }
+    jVisorVideojuego.revalidate();
+    jVisorVideojuego.repaint();
+  }
+
+  @Override
+  public void setControlador(Controlador c) {
+    this.controlador = c;
+  }
+
+  @Override
+  public void arranca() {
+    pack();
+    setLocationRelativeTo(null);
+    setVisible(true);
+  }
+
+  @Override
+  public void haceAlgo(String s) {
+    //aaa
+  }
+
+  public List<String> obtenerGenerosSelected() {
+    List<String> returnListGeneros = new ArrayList<>();
     
     for (Checkbox aux : listaGenerosSelected) {
       if (aux.getState() == true) {
-        listaCheckboxGeneros.add(aux.getLabel());
+        returnListGeneros.add(aux.getLabel());
       }
-    }
+    } 
     
+    return returnListGeneros;
+  }
+
+  public List<String> obtenerPlataformasSelected() {
+    List<String> returnListPlataformas = new ArrayList<>();
     for (Checkbox aux : listaPlataformasSelected) {
       if (aux.getState() == true) {
-        listaCheckBoxPlataforma.add(aux.getLabel());
+        returnListPlataformas.add(aux.getLabel());
       }
     }
     
+    return returnListPlataformas;
+  }
+
+  public List<String> obtenerModosJuegoSelected() {
+    List<String> returnListModosJuego = new ArrayList<>();
     for (Checkbox aux : listaModosJuegoSelected) {
       if (aux.getState() == true) {
-        listaCheckboxModoJuego.add(aux.getLabel());
+        returnListModosJuego.add(aux.getLabel());
       }
     }
+    
+    return returnListModosJuego;
   }
-  
-  
+
+
+  public List<Integer> obtenerPEGISelected() {
+    List<Integer> returnListPEGI = new ArrayList<>();
+    for (Checkbox aux : listaPEGISelected) {
+      if (aux.getState() == true) {
+        returnListPEGI.add(Integer.valueOf(aux.getLabel()));
+      }
+    }
+    
+    return returnListPEGI;
+  }
  //-------------------------------------------------------------------------------------------------------------->
   private void cargarOpcionesGenero () {
     panelOpcionesGenero.removeAll();
-    List<String> listaGeneros = controlador.cargarNombresGeneros();
+    List<String> listaGeneros = this.controlador.cargarNombresGeneros();
     
     for (String aux : listaGeneros) {
       java.awt.Checkbox genCheckBox = new Checkbox(aux, false);
@@ -364,14 +463,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
   
   private void cargarOpcionesPEGI () {
     panelOpcionesPEGI.removeAll();
-    List<String> listaPEGI = controlador.car
+    List<String> listaPEGI = new ArrayList<>();
+    
+    for (Integer aux : controlador.cargarPEGIs()) {
+      listaPEGI.add(Integer.toString(aux));
+    }
+    
+    for (String aux : listaPEGI) {
+      java.awt.Checkbox genCheckBox = new Checkbox(aux, false);
+      listaPEGISelected.add(genCheckBox);
+      panelOpcionesPEGI.add(genCheckBox);
+    }
   }
-  
- //-------------------------------------------------------------------------------------------------------------->
-  
-  
- //-------------------------------------------------------------------------------------------------------------->
-  
-  
- //-------------------------------------------------------------------------------------------------------------->
 }

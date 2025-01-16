@@ -38,7 +38,6 @@ public class Controlador implements ActionListener{
     this.modeloFiltros = inputModeloFiltros;
 
     this.vista.setControlador(this);
-    this.vista.arranca();
   }
 
 
@@ -54,15 +53,15 @@ public class Controlador implements ActionListener{
       }
       
       case InterfazVista.FILTRO_SELECT_PLATAFORMA -> {
-        this.vista.agregarVisores(FiltrosJPAController.getInstance().consultaVideojuegoPorPlataforma(this.vista.obtenerPlataformasSelected()));
+        // this.vista.agregarVisores(FiltrosJPAController.getInstance().consultaVideojuegoPorPlataforma(this.vista.obtenerPlataformasSelected()));
       }
       
       case InterfazVista.FILTRO_SELECT_PEGI -> {
-        this.vista.agregarVisores(FiltrosJPAController.getInstance().consultaVideojuegoPorPEGI(this.vista.obtenerPEGISelected()));
+        // this.vista.agregarVisores(FiltrosJPAController.getInstance().consultaVideojuegoPorPEGI(this.vista.obtenerPEGISelected()));
       }
       
       case InterfazVista.FILTRO_SELECT_MODO_JUEGO -> {
-        this.vista.agregarVisores(FiltrosJPAController.getInstance().consultaVideojuegoPorModoJuego(this.vista.obtenerModosJuegoSelected()));
+        // this.vista.agregarVisores(FiltrosJPAController.getInstance().consultaVideojuegoPorModoJuego(this.vista.obtenerModosJuegoSelected()));
       }
     }
   }
@@ -100,6 +99,7 @@ public class Controlador implements ActionListener{
   public List<Genero> cargarGeneros () {
     return this.modeloOperaciones.devolverListaGeneros();
   }
+  
   public List<String> cargarNombresGeneros () {
     List<String> listaGeneros = new ArrayList<>();
     for (Genero aux : cargarGeneros()) {
@@ -120,5 +120,30 @@ public class Controlador implements ActionListener{
     }
     
     return listaModosJuego;
+  }
+  public List<Integer> cargarPEGIs () {
+    List<Integer> listaPEGIs = new ArrayList<>();
+    for (Short aux : this.modeloOperaciones.listaCompletaPEGI()) {
+      listaPEGIs.add(Integer.valueOf(aux));
+    }
+    
+    return listaPEGIs;
+  }
+  
+  public void rellenarDatos(InterfazVista inputVista) {
+    List<Videojuego> listaVideojuegos = cargarVideojuegos();
+    inputVista.agregarVisores(listaVideojuegos);
+  }
+  
+  public Genero encontrarGenero(String inputNombre) {
+    return modeloOperaciones.buscarGeneroPorNombre(inputNombre);
+  }
+  
+  public Plataforma encontrarPlataforma (String inputNombre) {
+    return modeloOperaciones.buscarPlataformaPorNombre(inputNombre);
+  }
+  
+  public ModoJuego encontrarModoJuego (String inputNombre) {
+    return modeloOperaciones.buscarModoJuegoPorNombre(inputNombre);
   }
 }

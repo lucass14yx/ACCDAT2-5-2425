@@ -21,8 +21,11 @@ import accdat.papergames.exceptions.NonexistentEntityException;
 import accdat.papergames.exceptions.PreexistingEntityException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
  *
@@ -344,7 +347,7 @@ public class VideojuegoJpaController implements Serializable {
     }
   }
   
-    public List<Videojuego> findVideojuegoByTitulo(String nombre) {
+  public List<Videojuego> findVideojuegoByTitulo(String nombre) {
     EntityManager em = getEntityManager();
     CriteriaBuilder cBuilder = em.getCriteriaBuilder();
     CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
@@ -397,5 +400,13 @@ public class VideojuegoJpaController implements Serializable {
     consulta.select(rootQuery).where(rootQuery.get("modoJuego").in(modosJuego));
 
     return em.createQuery(consulta).getResultList();
+  }
+  
+  public List<Short> obtenerListaPEGI () {
+    EntityManager em = getEntityManager();
+    TypedQuery<Short> query = em.createNamedQuery("Videojuego.obtenerListaPEGI", Short.class);
+    List<Short> listaPegi = query.getResultList();
+    
+    return listaPegi.stream().collect(Collectors.toList());
   }
 }
