@@ -5,15 +5,17 @@
 package accdat.papergames.Vista;
 
 import accdat.papergames.Controlador.Controlador;
-import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
-import java.awt.BorderLayout;
 import java.awt.Checkbox;
-import java.awt.CheckboxGroup;
-import java.awt.SystemColor;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
-import javax.swing.JPanel;
+import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
@@ -24,32 +26,30 @@ import javax.swing.border.EmptyBorder;
  */
 public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVista {
   private Controlador controlador;
+  private Long idVideojuego;
+  Videojuego videojuegoSelected;
+  
   private List<Checkbox> listaGenerosSelected = new ArrayList<>();
   private List<Checkbox> listaPlataformasSelected = new ArrayList<>();
   private List<Checkbox> listaPEGISelected = new ArrayList<>();
   private List<Checkbox> listaModosJuegoSelected = new ArrayList<>();
   
-  
+  private int anioSalidaMinimo;
+  private int anioSalidaMaximo;
   
   /**
    * Creates new form VentanaPrincipal
    */
   public VentanaPrincipal() {
     initComponents();
-    panelOpcionesGenero.setLayout(new java.awt.GridLayout(0,1));
-    panelOpcionesPlataforma.setLayout(new java.awt.GridLayout(0,1));
-    panelOpcionesModoJuego.setLayout(new java.awt.GridLayout(0,1));
-    panelOpcionesPEGI.setLayout(new java.awt.GridLayout(0,1));
     
-    jVisorVideojuego.setLayout(new java.awt.GridLayout(0, 1));
-    JScrollPane scrollPaneListaVideojuegos = new JScrollPane(jVisorVideojuego);
-    scrollPaneListaVideojuegos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-    scrollPaneListaVideojuegos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    jPanelVideojuego.setLayout(new GridLayout(0, 1));
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     
-//    cargarOpcionesGenero();
-//    cargarOpcionesModosJuego();
-//    cargarOpcionesPlataforma();
-//    cargarOpcionesPEGI();
+    
+            
+    iniciarComponentes();
   }
 
   /**
@@ -64,22 +64,20 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
     panelFiltros = new javax.swing.JPanel();
     txtGenero = new javax.swing.JLabel();
     txtPlataforma = new javax.swing.JLabel();
-    txtAnioPublicacion = new javax.swing.JLabel();
     txtPegi = new javax.swing.JLabel();
     txtModoJuego = new javax.swing.JLabel();
     panelOpcionesGenero = new javax.swing.JPanel();
     panelOpcionesPlataforma = new javax.swing.JPanel();
     panelOpcionesModoJuego = new javax.swing.JPanel();
     panelOpcionesPEGI = new javax.swing.JPanel();
-    spinnerAnioSalida = new javax.swing.JSpinner();
     btnModificar = new javax.swing.JButton();
     btnAgregarJuego = new javax.swing.JButton();
     btnEliminar = new javax.swing.JButton();
     btnBuscar = new javax.swing.JButton();
-    jVisorVideojuego = new javax.swing.JPanel();
+    scrollPane = new javax.swing.JScrollPane();
+    jPanelVideojuego = new javax.swing.JPanel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    setPreferredSize(new java.awt.Dimension(1200, 800));
 
     panelFiltros.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
     panelFiltros.setPreferredSize(new java.awt.Dimension(190, 632));
@@ -87,8 +85,6 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
     txtGenero.setText("Género");
 
     txtPlataforma.setText("Plataforma");
-
-    txtAnioPublicacion.setText("Año de publicación");
 
     txtPegi.setText("PEGI");
 
@@ -138,10 +134,8 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
     );
     panelOpcionesPEGILayout.setVerticalGroup(
       panelOpcionesPEGILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 100, Short.MAX_VALUE)
+      .addGap(0, 0, Short.MAX_VALUE)
     );
-
-    spinnerAnioSalida.setModel(new javax.swing.SpinnerNumberModel(2020, 2000, 2029, 1));
 
     javax.swing.GroupLayout panelFiltrosLayout = new javax.swing.GroupLayout(panelFiltros);
     panelFiltros.setLayout(panelFiltrosLayout);
@@ -151,15 +145,13 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
         .addContainerGap()
         .addGroup(panelFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(txtPegi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(txtModoJuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(txtModoJuego, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
           .addComponent(txtGenero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(txtPlataforma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(panelOpcionesGenero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(panelOpcionesPlataforma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(panelOpcionesModoJuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(panelOpcionesPEGI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(txtAnioPublicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-          .addComponent(spinnerAnioSalida))
+          .addComponent(panelOpcionesPEGI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
     panelFiltrosLayout.setVerticalGroup(
@@ -180,12 +172,8 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(txtPegi)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(panelOpcionesPEGI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(txtAnioPublicacion)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(spinnerAnioSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addComponent(panelOpcionesPEGI, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGap(0, 0, 0))
     );
 
     btnModificar.setText("Modificar");
@@ -203,28 +191,45 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
     btnAgregarJuego.setMaximumSize(new java.awt.Dimension(75, 30));
     btnAgregarJuego.setMinimumSize(new java.awt.Dimension(75, 30));
     btnAgregarJuego.setPreferredSize(new java.awt.Dimension(75, 30));
+    btnAgregarJuego.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnAgregarJuegoActionPerformed(evt);
+      }
+    });
 
     btnEliminar.setText("Eliminar");
     btnEliminar.setEnabled(false);
     btnEliminar.setMaximumSize(new java.awt.Dimension(75, 30));
     btnEliminar.setMinimumSize(new java.awt.Dimension(75, 30));
     btnEliminar.setPreferredSize(new java.awt.Dimension(75, 30));
+    btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnEliminarActionPerformed(evt);
+      }
+    });
 
     btnBuscar.setText("Buscar");
     btnBuscar.setMaximumSize(new java.awt.Dimension(75, 30));
     btnBuscar.setMinimumSize(new java.awt.Dimension(75, 30));
     btnBuscar.setPreferredSize(new java.awt.Dimension(75, 30));
+    btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btnBuscarActionPerformed(evt);
+      }
+    });
 
-    javax.swing.GroupLayout jVisorVideojuegoLayout = new javax.swing.GroupLayout(jVisorVideojuego);
-    jVisorVideojuego.setLayout(jVisorVideojuegoLayout);
-    jVisorVideojuegoLayout.setHorizontalGroup(
-      jVisorVideojuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 708, Short.MAX_VALUE)
+    javax.swing.GroupLayout jPanelVideojuegoLayout = new javax.swing.GroupLayout(jPanelVideojuego);
+    jPanelVideojuego.setLayout(jPanelVideojuegoLayout);
+    jPanelVideojuegoLayout.setHorizontalGroup(
+      jPanelVideojuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 700, Short.MAX_VALUE)
     );
-    jVisorVideojuegoLayout.setVerticalGroup(
-      jVisorVideojuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+    jPanelVideojuegoLayout.setVerticalGroup(
+      jPanelVideojuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 802, Short.MAX_VALUE)
     );
+
+    scrollPane.setViewportView(jPanelVideojuego);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -233,31 +238,31 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(panelFiltros, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-          .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(btnAgregarJuego, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(panelFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(btnAgregarJuego, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jVisorVideojuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(scrollPane)
         .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(scrollPane)
           .addGroup(layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(panelFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(panelFiltros, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
+            .addGap(10, 10, 10)
             .addComponent(btnAgregarJuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addComponent(jVisorVideojuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         .addContainerGap())
     );
 
@@ -270,24 +275,37 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
     panelOpcionesModoJuego.setLayout(new java.awt.GridLayout(0,1));
     panelOpcionesPEGI.setLayout(new java.awt.GridLayout(0,1));
     
-    jVisorVideojuego.setLayout(new java.awt.GridLayout(0, 1));
-    JScrollPane scrollPaneListaVideojuegos = new JScrollPane(jVisorVideojuego);
-    scrollPaneListaVideojuegos.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-    scrollPaneListaVideojuegos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-//    cargarOpcionesGenero();
-//    cargarOpcionesModosJuego();
-//    cargarOpcionesPlataforma();
-//    cargarOpcionesPEGI();
-//    controlador.rellenarDatos(this);
+    
+    cargarOpcionesGenero();
+    cargarOpcionesModosJuego();
+    cargarOpcionesPlataforma();
+    cargarOpcionesPEGI();
   }
   
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         this.setVisible(false);
-        VentanaModVideojuego ventana = new VentanaModVideojuego();
+        VentanaModVideojuego ventana = new VentanaModVideojuego(idVideojuego);
         ventana.setControlador(this.controlador);
+        ventana.setVentanaPadre(this);
         ventana.arranca();
     }//GEN-LAST:event_btnModificarActionPerformed
+
+  private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    this.controlador.eliminarVideojuego(this.videojuegoSelected);
+    this.agregarVisores(this.controlador.cargarVideojuegos());
+  }//GEN-LAST:event_btnEliminarActionPerformed
+
+  private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+    this.agregarVisores(cargarFiltros());
+  }//GEN-LAST:event_btnBuscarActionPerformed
+
+  private void btnAgregarJuegoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarJuegoActionPerformed
+    this.setVisible(false);
+    VentanaCreateVideojuego ventana = new VentanaCreateVideojuego();
+    ventana.setControlador(this.controlador);
+    ventana.setVentanaPadre(this);
+    ventana.arranca();
+  }//GEN-LAST:event_btnAgregarJuegoActionPerformed
 
   /**
    * @param args the command line arguments
@@ -325,44 +343,53 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
   private javax.swing.JButton btnBuscar;
   private javax.swing.JButton btnEliminar;
   private javax.swing.JButton btnModificar;
-  private javax.swing.JPanel jVisorVideojuego;
+  private javax.swing.JPanel jPanelVideojuego;
   private javax.swing.JPanel panelFiltros;
   private javax.swing.JPanel panelOpcionesGenero;
   private javax.swing.JPanel panelOpcionesModoJuego;
   private javax.swing.JPanel panelOpcionesPEGI;
   private javax.swing.JPanel panelOpcionesPlataforma;
-  private javax.swing.JSpinner spinnerAnioSalida;
-  private javax.swing.JLabel txtAnioPublicacion;
+  private javax.swing.JScrollPane scrollPane;
   private javax.swing.JLabel txtGenero;
   private javax.swing.JLabel txtModoJuego;
   private javax.swing.JLabel txtPegi;
   private javax.swing.JLabel txtPlataforma;
   // End of variables declaration//GEN-END:variables
   
- 
-  
- //-------------------------------------------------------------------------------------------------------------->
-  
-  
- //-------------------------------------------------------------------------------------------------------------->
-  
-  
  //-------------------------------------------------------------------------------------------------------------->
 
   @Override
   public void agregarVisores(List<Videojuego> inputListaVideojuegos) {
-    jVisorVideojuego.removeAll();
+    jPanelVideojuego.removeAll();
     for (Videojuego aux : inputListaVideojuegos) {
       VisorVideojuegos visor = new VisorVideojuegos();
-      JPanel contenedorVisor = new JPanel(new BorderLayout());
+      JButton contenedorVisor = new JButton();
       contenedorVisor.setBorder(new EmptyBorder(5, 10, 5, 10));
       visor.setBaseVideojuego(aux);
       visor.asignacionContenidoElementGraficos();
+      
+      contenedorVisor.setBackground(new Color(0, 0, 0, 0));
+      
       contenedorVisor.add(visor);
-      jVisorVideojuego.add(contenedorVisor);
+      contenedorVisor.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked (MouseEvent e) {
+          idVideojuego = visor.getBaseVideojuego().getIdVideojuego();
+          videojuegoSelected = visor.getBaseVideojuego();
+          System.out.println(visor.getBaseVideojuego().getIdVideojuego());
+          if (idVideojuego != null) {
+            btnModificar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+          } else {
+            btnModificar.setEnabled(false);
+            btnEliminar.setEnabled(false);
+          }
+        }
+      });
+      jPanelVideojuego.add(contenedorVisor);
     }
-    jVisorVideojuego.revalidate();
-    jVisorVideojuego.repaint();
+    jPanelVideojuego.revalidate();
+    jPanelVideojuego.repaint();
   }
 
   @Override
@@ -429,6 +456,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
   }
  //-------------------------------------------------------------------------------------------------------------->
   private void cargarOpcionesGenero () {
+    this.controlador = new Controlador(this);
     panelOpcionesGenero.removeAll();
     List<String> listaGeneros = this.controlador.cargarNombresGeneros();
     
@@ -474,5 +502,93 @@ public class VentanaPrincipal extends javax.swing.JFrame implements InterfazVist
       listaPEGISelected.add(genCheckBox);
       panelOpcionesPEGI.add(genCheckBox);
     }
+  }
+
+  @Override
+  public Videojuego getVideojuegoSelected() {
+    return null;
+  }
+  
+ //-------------------------------------------------------------------------------------------------------------->
+  private List<Videojuego> cargarFiltros () {    
+    List<String> filtrosPlataformas = recuperarFiltrosPlataformas();
+    List<String> filtrosGeneros = recuperarFiltrosGeneros();
+    List<String> filtrosModosJuego = recuperarFiltrosModosJuego();
+    List<Integer> filtrosPEGI = recuperarFiltrosPEGI();
+    
+    List<Videojuego> listaJuegosFiltrosPlataforma = new ArrayList<>();
+    List<Videojuego> listaJuegosFiltrosGeneros = new ArrayList<>();
+    List<Videojuego> listaJuegosFiltrosModosJuego = new ArrayList<>();
+    List<Videojuego> listaJuegosFiltrosPEGI = new ArrayList<>();
+    
+    if (!filtrosPlataformas.isEmpty()) {
+      listaJuegosFiltrosPlataforma = this.controlador.recuperarJuegosFiltroPlataformas(filtrosPlataformas);
+    }
+    if (!filtrosGeneros.isEmpty()) {
+      listaJuegosFiltrosGeneros = this.controlador.recuperarJuegosFiltroGeneros(filtrosGeneros);
+    }
+    if (!filtrosModosJuego.isEmpty()) {
+      listaJuegosFiltrosModosJuego = this.controlador.recuperarJuegosFiltroModosJuego(filtrosModosJuego);
+    }
+    if (!filtrosPEGI.isEmpty()) {
+      listaJuegosFiltrosPEGI = this.controlador.recuperarJuegosFiltroPEGI(filtrosPEGI);
+    }
+    
+    Set<Videojuego> listaVideojuegosFiltrados = new HashSet<>();
+    listaVideojuegosFiltrados.addAll(listaJuegosFiltrosPlataforma);
+    listaVideojuegosFiltrados.addAll(listaJuegosFiltrosGeneros);
+    listaVideojuegosFiltrados.addAll(listaJuegosFiltrosModosJuego);
+    listaVideojuegosFiltrados.addAll(listaJuegosFiltrosPEGI);
+    
+    List<Videojuego> listaVideojuegosFinal = new ArrayList<>(listaVideojuegosFiltrados);
+    return listaVideojuegosFinal;
+  }
+  
+  private List<String> recuperarFiltrosPlataformas () {
+    List<String> listaFiltrosPlataformas = new ArrayList<>();
+    
+    for (Checkbox aux : listaPlataformasSelected) {
+      if (aux.getState() == true) {
+        listaFiltrosPlataformas.add(aux.getLabel());
+      }
+    }
+    
+    return listaFiltrosPlataformas;
+  }
+  
+  private List<String> recuperarFiltrosGeneros () {
+    List<String> listaFiltrosGeneros = new ArrayList<>();
+    
+    for (Checkbox aux : listaGenerosSelected) {
+      if (aux.getState() == true) {
+        listaFiltrosGeneros.add(aux.getLabel());
+      }
+    }
+    
+    return listaFiltrosGeneros;
+  }
+  
+  private List<String> recuperarFiltrosModosJuego () {
+    List<String> listaFiltrosModosJuego = new ArrayList<>();
+    
+    for (Checkbox aux : listaModosJuegoSelected) {
+      if (aux.getState() == true) {
+        listaFiltrosModosJuego.add(aux.getLabel());
+      }
+    }
+    
+    return listaFiltrosModosJuego;
+  }
+  
+  private List<Integer> recuperarFiltrosPEGI () {
+    List<Integer> listaFiltrosPEGI = new ArrayList<>();
+    
+    for (Checkbox aux : listaPEGISelected) {
+      if (aux.getState() == true) {
+        listaFiltrosPEGI.add(Integer.parseInt(aux.getLabel()));
+      }
+    }
+    
+    return listaFiltrosPEGI;
   }
 }

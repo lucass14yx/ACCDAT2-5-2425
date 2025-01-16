@@ -13,6 +13,7 @@ import jakarta.persistence.LockModeType;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
@@ -232,5 +233,21 @@ public class FiltrosBBDD_JPQL {
     }
     
     return numRegistrosActualizados;
+  }
+  
+  public List<Videojuego> consultaVideojuegoPorGenero(List<String> nombreGeneros) {
+    abrirFactory(); 
+    entityManager.getTransaction().begin();
+    
+    List<Videojuego> listaVideojuegos = entityManager.createQuery(
+        "SELECT v FROM Videojuego v JOIN v.genero g WHERE g.nombreGenero IN :generos", Videojuego.class)
+        .setParameter("generos", nombreGeneros)
+        .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+        .getResultList();
+    
+    entityManager.getTransaction().commit();
+    cerrarFactory(); 
+    
+    return listaVideojuegos;
   }
 }

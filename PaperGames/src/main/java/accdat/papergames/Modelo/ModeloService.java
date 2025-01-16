@@ -6,6 +6,7 @@ package accdat.papergames.Modelo;
 
 import accdat.papergames.Modelo.Controllers.*;
 import accdat.papergames.Modelo.Persistencia.*;
+import accdat.papergames.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.Collection;
@@ -89,14 +90,10 @@ public class ModeloService {
      * Lista solo 1 videojuego
      * @param idVideojuego Id del videojuego que queremos extraer
      */
-    public void listarUnVideojuego(int idVideojuego) {
-        Videojuego videojuego = videojuegoJpaC.findVideojuego((long) idVideojuego);
-
-        if (videojuego != null) {
-            System.out.println(videojuego.getTitulo());
-        } else {
-            System.out.println("El videojuego con ID " + idVideojuego + " no existe.");
-        }
+    public Videojuego listarUnVideojuego(Long idVideojuego) {
+      Videojuego videojuego = videojuegoJpaC.findVideojuego(idVideojuego);
+      System.out.println(videojuego.getIdVideojuego());
+      return videojuego;
     }
 
     /** ***************************
@@ -169,21 +166,13 @@ public class ModeloService {
      * @param nombrePlataforma nombrePlataforma nueva del videojuego
      * @param nombreGenero nombreGenero nuevo del videojuego
      */
-    public void modificarVideojuego(int idVideojuego, String titulo, String descripcion, short año, short pegi, Plataforma nombrePlataforma, Genero nombreGenero) {
-        Videojuego videojuego = videojuegoJpaC.findVideojuego((long) idVideojuego);
-
-        if (videojuego != null) {
-            videojuego.setTitulo(titulo);
-            videojuego.setDescripcion(descripcion);
-            videojuego.setAño(año);
-            videojuego.setPegi(pegi);
-            videojuego.setNombrePlataforma(nombrePlataforma);
-            videojuego.setNombreGenero(nombreGenero);
-            Logger.getLogger(ModeloService.class.getName())
-                    .log(Level.INFO, "El videojuego ha sido modificado exitosamente: {0}", videojuego);
-        } else {
-            Logger.getLogger(ModeloService.class.getName())
-                    .log(Level.WARNING, "El videojuego con ID {0} no existe y no se puede modificar.", idVideojuego);
-        }
+    public void modificarVideojuego(Videojuego inputVideojuego) {
+      try {
+        videojuegoJpaC.edit(inputVideojuego);
+      } catch (NonexistentEntityException ex) {
+        Logger.getLogger(ModeloService.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (Exception ex) {
+        Logger.getLogger(ModeloService.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }
 }

@@ -11,6 +11,7 @@ import accdat.papergames.Modelo.Persistencia.Videojuego;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -35,7 +36,13 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     vModoJuego.setEditable(false);
     vAnioSalida.setEditable(false);
     vDLC.setEditable(false);
+    
     vDescripcion.setEditable(false);
+    vDescripcion.setLineWrap(true);
+    vDescripcion.setWrapStyleWord(true);
+    scrollPanelDescripcion.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPanelDescripcion.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    
     vGenero.setEditable(false);
     vPEGI.setEditable(false);
     vPlataformaText.setEditable(false);
@@ -55,7 +62,6 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     vListaPlataforma = new javax.swing.JList<>();
     jScrollPane2 = new javax.swing.JScrollPane();
     vListaPlataforma1 = new javax.swing.JList<>();
-    vDescripcion = new javax.swing.JTextField();
     vPlataformaText = new javax.swing.JTextField();
     vGenero = new javax.swing.JTextField();
     jScrollPane3 = new javax.swing.JScrollPane();
@@ -69,6 +75,8 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     vDLC = new javax.swing.JTextField();
     vListaDLC = new javax.swing.JScrollPane();
     vListaDLCs = new javax.swing.JList<>();
+    scrollPanelDescripcion = new javax.swing.JScrollPane();
+    vDescripcion = new javax.swing.JTextArea();
 
     vListaPlataforma.setModel(new javax.swing.AbstractListModel<String>() {
       String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -87,14 +95,6 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     setBackground(new java.awt.Color(200, 212, 227));
     setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
     setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-    vDescripcion.setEditable(false);
-    vDescripcion.setFocusable(false);
-    vDescripcion.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        vDescripcionActionPerformed(evt);
-      }
-    });
 
     vPlataformaText.setHorizontalAlignment(javax.swing.JTextField.CENTER);
     vPlataformaText.setText("Plataforma");
@@ -132,6 +132,10 @@ public class VisorVideojuegos extends javax.swing.JPanel {
     vListaDLC.setViewportView(vListaDLCs);
     vListaDLCs.getAccessibleContext().setAccessibleParent(this);
 
+    vDescripcion.setColumns(20);
+    vDescripcion.setRows(5);
+    scrollPanelDescripcion.setViewportView(vDescripcion);
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
@@ -140,7 +144,7 @@ public class VisorVideojuegos extends javax.swing.JPanel {
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
-            .addComponent(vDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(scrollPanelDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
               .addComponent(vPlataformaText, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
@@ -174,7 +178,6 @@ public class VisorVideojuegos extends javax.swing.JPanel {
           .addComponent(vTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(vDescripcion)
           .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
               .addComponent(vPlataformaText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,14 +187,11 @@ public class VisorVideojuegos extends javax.swing.JPanel {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addComponent(jScrollPane3)
               .addComponent(vListaPlataformas, javax.swing.GroupLayout.Alignment.TRAILING)
-              .addComponent(vListaDLC, javax.swing.GroupLayout.Alignment.TRAILING))))
+              .addComponent(vListaDLC, javax.swing.GroupLayout.Alignment.TRAILING)))
+          .addComponent(scrollPanelDescripcion))
         .addContainerGap())
     );
   }// </editor-fold>//GEN-END:initComponents
-
-  private void vDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vDescripcionActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_vDescripcionActionPerformed
 
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -199,9 +199,10 @@ public class VisorVideojuegos extends javax.swing.JPanel {
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JScrollPane jScrollPane3;
+  private javax.swing.JScrollPane scrollPanelDescripcion;
   private javax.swing.JTextField vAnioSalida;
   private javax.swing.JTextField vDLC;
-  private javax.swing.JTextField vDescripcion;
+  private javax.swing.JTextArea vDescripcion;
   private javax.swing.JTextField vGenero;
   private javax.swing.JScrollPane vListaDLC;
   private javax.swing.JList<String> vListaDLCs;

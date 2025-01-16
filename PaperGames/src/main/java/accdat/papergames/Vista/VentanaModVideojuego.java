@@ -13,6 +13,7 @@ import java.awt.Checkbox;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.JScrollPane;
 
 /**
@@ -21,7 +22,10 @@ import javax.swing.JScrollPane;
  */
 public class VentanaModVideojuego extends javax.swing.JFrame implements InterfazVista {
   private Controlador controlador;
-  private Videojuego baseVideojuego;
+  private VisorVideojuegos visorJuego;
+  private Long idVideojuego;
+  private Videojuego videojuegoSelected;
+  private VentanaPrincipal ventanaPadre;
   
   private String titulo;
   private String generoSelected;
@@ -37,16 +41,27 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   /**
    * Creates new form VentanaModVideojuego
    */
-  public VentanaModVideojuego() {
+  public VentanaModVideojuego(Long inputIdVideojuego) {
+    this.idVideojuego = inputIdVideojuego;
     initComponents();
+    
+    btnAceptar.setActionCommand(InterfazVista.OPERACION_MODIFICAR_VIDEOJUGO);
+    
+    txtDescripcion.setLineWrap(true);
+    txtDescripcion.setWrapStyleWord(true);
+    scrollPaneDescipcion.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPaneDescipcion.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    
     iniciarComponentes();
   }
   
   private void iniciarComponentes () {
+    this.controlador = new Controlador(this);
     panelListaPlataformas.setLayout(new java.awt.GridLayout(0,1));
     panelListaModosJuego.setLayout(new java.awt.GridLayout(0,1));
     btnAceptar.setActionCommand(OPERACION_MODIFICAR_VIDEOJUGO);
     
+    devolverVideojuego(this.idVideojuego);
     cargarOpcionesGenero();
     cargarOpcionesModosJuego();
     cargarOpcionesPlataforma();
@@ -79,7 +94,7 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
     panelListaPlataformas = new javax.swing.JPanel();
     panelProp3 = new javax.swing.JPanel();
     lblTxtDescrip = new javax.swing.JLabel();
-    jScrollPane1 = new javax.swing.JScrollPane();
+    scrollPaneDescipcion = new javax.swing.JScrollPane();
     txtDescripcion = new javax.swing.JTextArea();
     panelProp4 = new javax.swing.JPanel();
     lblModosJuego = new javax.swing.JLabel();
@@ -89,11 +104,11 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
     btnCancelar = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    setPreferredSize(new java.awt.Dimension(0, 0));
     setSize(new java.awt.Dimension(0, 0));
 
     jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
 
+    lblTituloVentana.setFont(new java.awt.Font("Comfortaa", 1, 18)); // NOI18N
     lblTituloVentana.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     lblTituloVentana.setText("MODIFICACION | VIDEOJUEGO");
     lblTituloVentana.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -110,6 +125,12 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
 
     lblPEGI.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     lblPEGI.setText("PEGI:");
+
+    cboxListaPegi.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cboxListaPegiActionPerformed(evt);
+      }
+    });
 
     lblGenero.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     lblGenero.setText("Genero:");
@@ -199,17 +220,17 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
 
     txtDescripcion.setColumns(20);
     txtDescripcion.setRows(5);
-    jScrollPane1.setViewportView(txtDescripcion);
+    scrollPaneDescipcion.setViewportView(txtDescripcion);
 
     javax.swing.GroupLayout panelProp3Layout = new javax.swing.GroupLayout(panelProp3);
     panelProp3.setLayout(panelProp3Layout);
     panelProp3Layout.setHorizontalGroup(
       panelProp3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(panelProp3Layout.createSequentialGroup()
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelProp3Layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(panelProp3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(lblTxtDescrip, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE))
+        .addGroup(panelProp3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+          .addComponent(scrollPaneDescipcion)
+          .addComponent(lblTxtDescrip, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE))
         .addContainerGap())
     );
     panelProp3Layout.setVerticalGroup(
@@ -218,7 +239,7 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
         .addContainerGap()
         .addComponent(lblTxtDescrip)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jScrollPane1)
+        .addComponent(scrollPaneDescipcion)
         .addContainerGap())
     );
 
@@ -282,7 +303,7 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(lblTituloVentana)
+        .addComponent(lblTituloVentana, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(panelProp1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -354,12 +375,23 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   }// </editor-fold>//GEN-END:initComponents
 
   private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    this.ventanaPadre.agregarVisores(this.controlador.cargarVideojuegos());
+    this.ventanaPadre.setVisible(true);
     this.dispose();
   }//GEN-LAST:event_btnCancelarActionPerformed
 
   private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+
     recogerDatosCampos();
+    this.controlador.modificarVideojuego(videojuegoSelected);
+    this.ventanaPadre.agregarVisores(this.controlador.cargarVideojuegos());
+    this.ventanaPadre.setVisible(true);
+    this.dispose();
   }//GEN-LAST:event_btnAceptarActionPerformed
+
+  private void cboxListaPegiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxListaPegiActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_cboxListaPegiActionPerformed
 
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -369,7 +401,6 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   private javax.swing.JComboBox<String> cboxListaPegi;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
-  private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JLabel lblAnioSalida;
   private javax.swing.JLabel lblGenero;
   private javax.swing.JLabel lblModosJuego;
@@ -384,43 +415,46 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   private javax.swing.JPanel panelProp2;
   private javax.swing.JPanel panelProp3;
   private javax.swing.JPanel panelProp4;
+  private javax.swing.JScrollPane scrollPaneDescipcion;
   private javax.swing.JSpinner spinnerAnioSalida;
   private javax.swing.JTextArea txtDescripcion;
   private javax.swing.JTextField txtTitulo;
   // End of variables declaration//GEN-END:variables
  //------------------------------------------------------------------------------------------------------------->
   private void cargarCamposDatosVideojuego () {
-    this.titulo = this.baseVideojuego.getTitulo();
-    this.generoSelected = this.baseVideojuego.getNombreGenero().getNombreGenero();
-    this.pegiSelected = this.baseVideojuego.getPegi();
-    this.descripcionSelected = this.baseVideojuego.getDescripcion();
-    this.anioSalida = this.baseVideojuego.getAño();
-    List<Plataforma> listaPlataformas = (List<Plataforma>) this.baseVideojuego.getPlataformaCollection();
-    List<ModoJuego> listaModosJuego = (List<ModoJuego>) this.baseVideojuego.getModoJuegoCollection();
+    this.titulo = videojuegoSelected.getTitulo();
+    this.generoSelected = videojuegoSelected.getNombreGenero().getNombreGenero();
+    this.pegiSelected = videojuegoSelected.getPegi();
+    this.descripcionSelected = videojuegoSelected.getDescripcion();
+    this.anioSalida = videojuegoSelected.getAño();
+    List<Plataforma> listaPlataformas = (List<Plataforma>) videojuegoSelected.getPlataformaCollection();
+    List<ModoJuego> listaModosJuego = (List<ModoJuego>) videojuegoSelected.getModoJuegoCollection();
     
     cargarPlataformaVideojuego(listaPlataformas);
     cargarModosJuegoVideojuego(listaModosJuego);
     
     txtTitulo.setText(this.titulo);
     txtDescripcion.setText(this.descripcionSelected);
+    spinnerAnioSalida.setValue(this.anioSalida);
     marcarOpcionGenero(this.generoSelected);
     marcarOpcionPEGI(this.pegiSelected);
   }
   
   private void recogerDatosCampos () {
-    this.baseVideojuego.setTitulo(txtTitulo.getText());
-    this.baseVideojuego.setDescripcion(txtDescripcion.getText());
-    this.baseVideojuego.setAño((short) this.anioSalida);
-    this.baseVideojuego.setNombreGenero(this.controlador.encontrarGenero((String) this.cboxListaGeneros.getSelectedItem()));
+    videojuegoSelected.setTitulo(txtTitulo.getText());
+    videojuegoSelected.setDescripcion(txtDescripcion.getText());
+    videojuegoSelected.setPegi((short) Integer.parseInt(cboxListaPegi.getSelectedItem().toString()));
+    videojuegoSelected.setAño((short) this.anioSalida);
+    videojuegoSelected.setNombreGenero(this.controlador.encontrarGenero((String) this.cboxListaGeneros.getSelectedItem()));
     
     insertarModosJuegoVideojuego();
     insertarPlataformasVideojuego();
-    this.baseVideojuego.setModoJuegoCollection(listaModosJuegoVideojuego);
-    this.baseVideojuego.setPlataformaCollection(listaPlataformasVideojuego);
+    videojuegoSelected.setModoJuegoCollection(listaModosJuegoVideojuego);
+    videojuegoSelected.setPlataformaCollection(listaPlataformasVideojuego);
   }
   
  //------------------------------------------------------------------------------------------------------------->
-  private void cargarOpcionesGenero () {
+  public void cargarOpcionesGenero () {
     cboxListaGeneros.removeAll();
     List<String> listaGeneros = controlador.cargarNombresGeneros();
     
@@ -436,7 +470,7 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
     }
   }
   
-  private void cargarOpcionesPlataforma () {
+  public void cargarOpcionesPlataforma () {
     panelListaPlataformas.removeAll();
     List<String> listaPlataformas = controlador.cargarNombresPlataformas();
     
@@ -463,7 +497,7 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
     }
   }
   
-  private void cargarOpcionesModosJuego () {
+  public void cargarOpcionesModosJuego () {
     panelListaModosJuego.removeAll();
     List<String> listaModosJuego = controlador.cargarNombresModoJuego();
     
@@ -474,7 +508,7 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
     }
   }
   private void cargarModosJuegoVideojuego (List<ModoJuego> inputListaPlataforma) { 
-    for (Checkbox aux : listaPlataformasSelected) {
+    for (Checkbox aux : listaModosJuegoSelected) {
       for (ModoJuego aux2 : inputListaPlataforma) {
         if (aux.getLabel().equals(aux2.getNombreModoJuego())) {
           aux.setState(true);
@@ -490,7 +524,7 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
     }
   }
   
-  private void cargarOpcionesPEGI () {
+  public void cargarOpcionesPEGI () {
     cboxListaPegi.removeAll();
     List<String> listaPEGI = new ArrayList<>();
     
@@ -502,23 +536,26 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
       cboxListaPegi.addItem(aux);
     }
   }
-    private void marcarOpcionPEGI (int inputPEGI) {
+  
+  private void marcarOpcionPEGI (int inputPEGI) {
     for (int i=0; i < cboxListaPegi.getItemCount(); i++) {
-      if (Integer.parseInt(cboxListaGeneros.getItemAt(i)) == inputPEGI) {
-        cboxListaGeneros.setSelectedIndex(i);
+      if (Integer.parseInt(cboxListaPegi.getItemAt(i)) == inputPEGI) {
+        cboxListaPegi.setSelectedIndex(i);
+      }
+    }
+  }
+    
+  private void devolverVideojuego (Long inputId) {
+    List<Videojuego> listaVideojuegos = this.controlador.cargarVideojuegos();
+    
+    for (Videojuego aux : listaVideojuegos) {
+      if (Objects.equals(aux.getIdVideojuego(), inputId)) {
+        this.videojuegoSelected = aux;
       }
     }
   }
   
  //------------------------------------------------------------------------------------------------------------->
-  public Videojuego getBaseVideojuego() {
-    return baseVideojuego;
-  }
-
-  public void setBaseVideojuego(Videojuego baseVideojuego) {
-    this.baseVideojuego = baseVideojuego;
-  }
-
   @Override
   public void agregarVisores(List<Videojuego> inputListaVideojuegos) {
     //no hace nada
@@ -532,6 +569,7 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
 
   @Override
   public void arranca() {
+    this.controlador = new Controlador(this);
     pack();
     setLocationRelativeTo(null);
     setVisible(true);
@@ -540,5 +578,37 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   @Override
   public void haceAlgo(String s) {
     // no hace nada
+  }
+
+  public VentanaPrincipal getVentanaPadre() {
+    return ventanaPadre;
+  }
+
+  public void setVentanaPadre(VentanaPrincipal ventanaPadre) {
+    this.ventanaPadre = ventanaPadre;
+  }
+
+  public Videojuego getVideojuegoSelected() {
+    return videojuegoSelected;
+  }
+
+  public void setVideojuegoSelected(Videojuego videojuegoSelected) {
+    this.videojuegoSelected = videojuegoSelected;
+  }
+
+  public Long getIdVideojuego() {
+    return idVideojuego;
+  }
+
+  public void setIdVideojuego(Long idVideojuego) {
+    this.idVideojuego = idVideojuego;
+  }
+
+  public VisorVideojuegos getVisorJuego() {
+    return visorJuego;
+  }
+
+  public void setVisorJuego(VisorVideojuegos visorJuego) {
+    this.visorJuego = visorJuego;
   }
 }

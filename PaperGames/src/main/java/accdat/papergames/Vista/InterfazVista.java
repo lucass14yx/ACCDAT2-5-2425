@@ -26,6 +26,7 @@ public interface InterfazVista {
   void agregarVisores(List<Videojuego> inputListaVideojuegos);  
   void setControlador(Controlador c);
   void arranca();
+  Videojuego getVideojuegoSelected();
     
   void haceAlgo(String s);
 }

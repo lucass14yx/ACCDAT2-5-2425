@@ -5,6 +5,7 @@
 package accdat.papergames;
 
 import accdat.papergames.Controlador.Controlador;
+import accdat.papergames.Modelo.Filtros.FiltrosBBDD_JPQL;
 import accdat.papergames.Modelo.Filtros.FiltrosJPAController;
 import accdat.papergames.Modelo.HelperOperaciones;
 import accdat.papergames.Modelo.ModeloService;
@@ -20,8 +21,9 @@ public class PaperGames {
     HelperOperaciones modeloOper = new HelperOperaciones();
     ModeloService modeloServicios = new ModeloService();
     FiltrosJPAController modeloFiltros = new FiltrosJPAController();
+    FiltrosBBDD_JPQL modeloFiltrosJPQL = new FiltrosBBDD_JPQL();
     InterfazVista vista = new VentanaPrincipal();
-    Controlador control = new Controlador(vista, modeloOper, modeloServicios, modeloFiltros);
+    Controlador control = new Controlador(vista, modeloOper, modeloServicios, modeloFiltros, modeloFiltrosJPQL);
     vista.arranca();
   }
 }

@@ -15,6 +15,7 @@ import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class HelperOperaciones {
    // constantes & atributos ->
     // instacia | patron singleton =>
   private static HelperOperaciones instance;
+  ModeloService modeloServicio = new ModeloService();
   
     // variables necesarias =>
   private EntityManagerFactory emFactory;
@@ -50,6 +52,10 @@ public class HelperOperaciones {
     return instance;
   }
   
+  private void abrirConexion () {
+    emFactory = Persistence.createEntityManagerFactory("accdat_PaperGames_jar_1.0-SNAPSHOTPU");
+  }
+  
   private void cerrarConexion () {
     emFactory.close();
   }
@@ -58,6 +64,7 @@ public class HelperOperaciones {
    // metodos publico ->
     // metodo publico | devolverListaVideojuegos =>
   public List<Videojuego> devolverListaVideojuegos () {
+    abrirConexion();
     List<Videojuego> listaCompletaVideojuegos = new ArrayList<>();
     
     try {
@@ -72,6 +79,7 @@ public class HelperOperaciones {
   }
     // metodo publico | devolverListaPlataformas =>
   public List<Plataforma> devolverListaPlataformas () {
+    abrirConexion();
     List<Plataforma> listaCompletaPlataformas = new ArrayList<>();
     try {
       listaCompletaPlataformas = pController.findPlataformaEntities();
@@ -85,6 +93,7 @@ public class HelperOperaciones {
   }
     // metodo publico | devolverListaGeneros =>
   public List<Genero> devolverListaGeneros () {
+    abrirConexion();
     List<Genero> listaCompletaGeneros = new ArrayList<>();
     try {
       listaCompletaGeneros = gController.findGeneroEntities();
@@ -99,7 +108,9 @@ public class HelperOperaciones {
   
     // metodo publico | devolverListaModosJuego =>
   public List<ModoJuego> devolverListaModosJuego () {
+    abrirConexion();
     List<ModoJuego> listaCompletaModosJuego = new ArrayList<>();
+    
     try {
       listaCompletaModosJuego = mjController.findModoJuegoEntities();
     } catch (Exception ex) {
@@ -113,6 +124,7 @@ public class HelperOperaciones {
   
     // metodo publico | devolverListaPEGIs =>
   public List<Short> listaCompletaPEGI () {
+    abrirConexion();
     List<Short> listaCompletaPEGIs = new ArrayList<>();
     try {
       listaCompletaPEGIs = vController.obtenerListaPEGI();
@@ -123,6 +135,22 @@ public class HelperOperaciones {
     }
     
     return listaCompletaPEGIs;
+  }
+ //----------------------------------------------------------------------------------------->
+  
+ //----------------------------------------------------------------------------------------->
+  public void insertarVideojuego (String inputTitulo, String inputDescripcion, short inputAnioSalida, 
+          short inputPegi, String inputGenero, Collection<Plataforma> inputPlataformas, Collection<ModoJuego> inputModosJuego) {
+    Videojuego nuevoVideojuego = new Videojuego(Long.valueOf((long) 0));
+    nuevoVideojuego.setTitulo(inputTitulo);
+    nuevoVideojuego.setDescripcion(inputDescripcion);
+    nuevoVideojuego.setAño(inputAnioSalida);
+    nuevoVideojuego.setPegi(inputPegi);
+    nuevoVideojuego.setNombreGenero(buscarGeneroPorNombre(inputGenero));
+    nuevoVideojuego.setPlataformaCollection(inputPlataformas);
+    nuevoVideojuego.setModoJuegoCollection(inputModosJuego);
+    
+    modeloServicio.insertaVideojuego(nuevoVideojuego);
   }
   
  //----------------------------------------------------------------------------------------->
