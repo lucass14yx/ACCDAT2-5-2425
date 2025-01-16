@@ -20,14 +20,13 @@ public interface InterfazVista {
   static final String FILTRO_SELECT_PLATAFORMA = "filtro de seleccionar plataforma";
   static final String FILTRO_SELECT_PEGI = "filtro de seleccionar el pegi";
   static final String FILTRO_SELECT_MODO_JUEGO = "filtro de seleccionar el modo de juego";
+  static final String OPERACION_MODIFICAR_VIDEOJUGO = "operacion de modificacion de videojuego";
   
  //-------------------------------------------------------------------------------------------------------------------->
   void agregarVisores(List<Videojuego> inputListaVideojuegos);  
   void setControlador(Controlador c);
   void arranca();
+  Videojuego getVideojuegoSelected();
     
   void haceAlgo(String s);
-  List<String> obtenerPlataformasSelected ();
-  List<String> obtenerModosJuegoSelected ();
-  List<Integer> obtenerPEGISelected ();
 }
