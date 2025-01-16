@@ -40,7 +40,7 @@ import java.util.Collection;
   @NamedQuery(name = "Videojuego.findByTitulo", query = "SELECT v FROM Videojuego v WHERE v.titulo = :titulo"),
   @NamedQuery(name = "Videojuego.findByA\u00f1o", query = "SELECT v FROM Videojuego v WHERE v.a\u00f1o = :a\u00f1o"),
   @NamedQuery(name = "Videojuego.findByPegi", query = "SELECT v FROM Videojuego v WHERE v.pegi = :pegi"),
-  @NamedQuery(name = "Videojuego.findByPegi", query = "SELECT v FROM Videojuego v WHERE v.pegi = :pegi")
+  @NamedQuery(name = "Videojuego.obtenerListaPEGI", query = "SELECT DISTINCT v.pegi FROM Videojuego v")
 })
 public class Videojuego implements Serializable {
 
@@ -48,8 +48,8 @@ public class Videojuego implements Serializable {
   @Id
   @Basic(optional = false)
   @NotNull
-  @GeneratedValue(generator = "secuencia")
-  @SequenceGenerator(name="secuencia", sequenceName = "videojuego_sequence", allocationSize = 1)
+  @GeneratedValue(generator = "secuencia_videojuego")
+  @SequenceGenerator(name="secuencia_videojuego", sequenceName = "videojuego_sequence", allocationSize = 1)
   @Column(name = "ID_VIDEOJUEGO")
   private Long idVideojuego;
 
@@ -71,7 +71,7 @@ public class Videojuego implements Serializable {
   @Basic(optional = false)
   @NotNull
   @Column(name = "PEGI", nullable = false)
-  private short pegi;
+  private short pegi; // 3 - 7 - 12 - 16 - 18
 
   @JoinTable(name = "VIDEOJUEGO_PLATAFORMAS", joinColumns = {
       @JoinColumn(name = "ID_VIDEOJUEGO", referencedColumnName = "ID_VIDEOJUEGO")}, inverseJoinColumns = {

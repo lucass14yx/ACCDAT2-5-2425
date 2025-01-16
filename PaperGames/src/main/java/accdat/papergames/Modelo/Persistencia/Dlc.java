@@ -42,8 +42,8 @@ public class Dlc implements Serializable {
   @Id
   @Basic(optional = false)
   @NotNull
-  @GeneratedValue(generator = "secuencia")
-  @SequenceGenerator(name="secuencia", sequenceName = "dlc_sequence", allocationSize = 1)
+  @GeneratedValue(generator = "secuencia_dlc")
+  @SequenceGenerator(name="secuencia_dlc", sequenceName = "dlc_sequence", allocationSize = 1)
   @Column(name = "ID_DLC")
   private Long idDlc;
 
