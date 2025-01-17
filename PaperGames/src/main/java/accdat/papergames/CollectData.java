@@ -41,10 +41,10 @@ public class CollectData {
   
  //------------------------------------------------------------------------------------------------->
   public static void main(String[] args) {
-    // generarGeneros();
-    // generarModosJuego();
-    // generarPlataformas();
-    // generarVideojuegos();
+//     generarGeneros();
+//     generarModosJuego();
+//     generarPlataformas();
+//     generarVideojuegos();
   }
   
  //------------------------------------------------------------------------------------------------->
