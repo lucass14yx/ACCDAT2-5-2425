@@ -302,111 +302,112 @@ public class VideojuegoJpaController implements Serializable {
   }
 
   public List<Videojuego> findVideojuegoEntities() {
-    return findVideojuegoEntities(true, -1, -1);
+      return findVideojuegoEntities(true, -1, -1);
   }
 
   public List<Videojuego> findVideojuegoEntities(int maxResults, int firstResult) {
-    return findVideojuegoEntities(false, maxResults, firstResult);
+      return findVideojuegoEntities(false, maxResults, firstResult);
   }
 
   private List<Videojuego> findVideojuegoEntities(boolean all, int maxResults, int firstResult) {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Videojuego.class));
-      Query q = em.createQuery(cq);
-      if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+      EntityManager em = getEntityManager();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          cq.select(cq.from(Videojuego.class));
+          Query q = em.createQuery(cq);
+          if (!all) {
+              q.setMaxResults(maxResults);
+              q.setFirstResult(firstResult);
+          }
+          return q.getResultList();
+      } finally {
+          em.close();
       }
-      return q.getResultList();
-    } finally {
-      em.close();
-    }
   }
 
   public Videojuego findVideojuego(Long id) {
-    EntityManager em = getEntityManager();
-    try {
-      return em.find(Videojuego.class, id);
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      try {
+          return em.find(Videojuego.class, id);
+      } finally {
+          em.close();
+      }
   }
 
   public int getVideojuegoCount() {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Videojuego> rt = cq.from(Videojuego.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          Root<Videojuego> rt = cq.from(Videojuego.class);
+          cq.select(em.getCriteriaBuilder().count(rt));
+          Query q = em.createQuery(cq);
+          return ((Long) q.getSingleResult()).intValue();
+      } finally {
+          em.close();
+      }
   }
-  
+
   public List<Videojuego> findVideojuegoByTitulo(String nombre) {
-    EntityManager em = getEntityManager();
-    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+      EntityManager em = getEntityManager();
+      CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+      Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
 
-    consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("nombre"), "%" + nombre + "%"));
+      consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("nombre"), "%" + nombre + "%"));
 
-    return em.createQuery(consulta).getResultList();
+      return em.createQuery(consulta).getResultList();
   }
-  
+
   public List<Videojuego> findVideojuegoByAnioPublicacionRange(int anioMin, int anioMax) {
-    EntityManager em = getEntityManager();
-    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+      EntityManager em = getEntityManager();
+      CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+      Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
 
-    consulta.select(rootQuery).where(cBuilder.between(rootQuery.get("anioPublicacion"), anioMin, anioMax));
+      consulta.select(rootQuery).where(cBuilder.between(rootQuery.get("anioPublicacion"), anioMin, anioMax));
 
-    return em.createQuery(consulta).getResultList();
+      return em.createQuery(consulta).getResultList();
   }
 
   public List<Videojuego> findVideojuegoByPlataformas(List<String> plataformas) {
-    EntityManager em = getEntityManager();
-    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+      EntityManager em = getEntityManager();
+      CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+      Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
 
-    consulta.select(rootQuery).where(rootQuery.get("plataforma").in(plataformas));
+      consulta.select(rootQuery).where(rootQuery.get("plataforma").in(plataformas));
 
-    return em.createQuery(consulta).getResultList();
+      return em.createQuery(consulta).getResultList();
   }
 
   public List<Videojuego> findVideojuegoByPEGI(List<Integer> listaPegi) {
-    EntityManager em = getEntityManager();
-    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+      EntityManager em = getEntityManager();
+      CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+      Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
 
-    consulta.select(rootQuery).where(rootQuery.get("pegi").in(listaPegi));
+      consulta.select(rootQuery).where(rootQuery.get("pegi").in(listaPegi));
 
-    return em.createQuery(consulta).getResultList();
+      return em.createQuery(consulta).getResultList();
   }
 
   public List<Videojuego> findVideojuegoByModosJuego(List<String> modosJuego) {
-    EntityManager em = getEntityManager();
-    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
+      EntityManager em = getEntityManager();
+      CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
+      Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
 
-    consulta.select(rootQuery).where(rootQuery.get("modoJuego").in(modosJuego));
+      consulta.select(rootQuery).where(rootQuery.get("modoJuego").in(modosJuego));
 
-    return em.createQuery(consulta).getResultList();
+      return em.createQuery(consulta).getResultList();
   }
-  
-  public List<Short> obtenerListaPEGI () {
-    EntityManager em = getEntityManager();
-    TypedQuery<Short> query = em.createNamedQuery("Videojuego.obtenerListaPEGI", Short.class);
-    List<Short> listaPegi = query.getResultList();
-    
-    return listaPegi.stream().collect(Collectors.toList());
+
+  public List<Short> obtenerListaPEGI() {
+      EntityManager em = getEntityManager();
+      TypedQuery<Short> query = em.createNamedQuery("Videojuego.obtenerListaPEGI", Short.class);
+      List<Short> listaPegi = query.getResultList();
+
+      return listaPegi.stream().collect(Collectors.toList());
   }
+
 }

@@ -178,7 +178,7 @@ public class Controlador implements ActionListener{
   
   public List<Videojuego> recuperarJuegosFiltroModosJuego (List<String> inputListaFiltros) {
     List<Videojuego> listaVideojuegosFiltrada = new ArrayList<>();
-    listaVideojuegosFiltrada = modeloFiltros.consultaVideojuegoPorModoJuego(inputListaFiltros);
+    listaVideojuegosFiltrada = modeloFiltrosJPQL.consultaVideojuegoPorModoJuego(inputListaFiltros);
     return listaVideojuegosFiltrada;
   }
   
