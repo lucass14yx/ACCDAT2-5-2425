@@ -148,49 +148,72 @@ public class GeneroJpaController implements Serializable {
   }
 
   public List<Genero> findGeneroEntities() {
-    return findGeneroEntities(true, -1, -1);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          List<Genero> result = findGeneroEntities(true, -1, -1);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   public List<Genero> findGeneroEntities(int maxResults, int firstResult) {
-    return findGeneroEntities(false, maxResults, firstResult);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          List<Genero> result = findGeneroEntities(false, maxResults, firstResult);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   private List<Genero> findGeneroEntities(boolean all, int maxResults, int firstResult) {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Genero.class));
-      Query q = em.createQuery(cq);
-      if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+      EntityManager em = getEntityManager();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          cq.select(cq.from(Genero.class));
+          Query q = em.createQuery(cq);
+          if (!all) {
+              q.setMaxResults(maxResults);
+              q.setFirstResult(firstResult);
+          }
+          return q.getResultList();
+      } finally {
+          em.close();
       }
-      return q.getResultList();
-    } finally {
-      em.close();
-    }
   }
 
   public Genero findGenero(String id) {
-    EntityManager em = getEntityManager();
-    try {
-      return em.find(Genero.class, id);
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          Genero result = em.find(Genero.class, id);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   public int getGeneroCount() {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Genero> rt = cq.from(Genero.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          Root<Genero> rt = cq.from(Genero.class);
+          cq.select(em.getCriteriaBuilder().count(rt));
+          Query q = em.createQuery(cq);
+          int count = ((Long) q.getSingleResult()).intValue();
+          em.getTransaction().commit();
+          return count;
+      } finally {
+          em.close();
+      }
   }
+
   
 }

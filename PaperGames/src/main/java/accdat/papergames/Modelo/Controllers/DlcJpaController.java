@@ -120,71 +120,107 @@ public class DlcJpaController implements Serializable {
   }
 
   public List<Dlc> findDlcEntities() {
-    return findDlcEntities(true, -1, -1);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          List<Dlc> result = findDlcEntities(true, -1, -1);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   public List<Dlc> findDlcEntities(int maxResults, int firstResult) {
-    return findDlcEntities(false, maxResults, firstResult);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          List<Dlc> result = findDlcEntities(false, maxResults, firstResult);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   private List<Dlc> findDlcEntities(boolean all, int maxResults, int firstResult) {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Dlc.class));
-      Query q = em.createQuery(cq);
-      if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+      EntityManager em = getEntityManager();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          cq.select(cq.from(Dlc.class));
+          Query q = em.createQuery(cq);
+          if (!all) {
+              q.setMaxResults(maxResults);
+              q.setFirstResult(firstResult);
+          }
+          return q.getResultList();
+      } finally {
+          em.close();
       }
-      return q.getResultList();
-    } finally {
-      em.close();
-    }
   }
 
   public Dlc findDlc(Long id) {
     EntityManager em = getEntityManager();
+    em.getTransaction().begin();
     try {
-      return em.find(Dlc.class, id);
+      Dlc dlc = em.find(Dlc.class, id);
+      em.getTransaction().commit();
+      return dlc;
+      
     } finally {
       em.close();
     }
   }
 
   public int getDlcCount() {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Dlc> rt = cq.from(Dlc.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          Root<Dlc> rt = cq.from(Dlc.class);
+          cq.select(em.getCriteriaBuilder().count(rt));
+          Query q = em.createQuery(cq);
+          int count = ((Long) q.getSingleResult()).intValue();
+          em.getTransaction().commit();
+          return count;
+      } finally {
+          em.close();
+      }
   }
-  
+
   public List<Dlc> findDLCByNombre(String nombre) {
-    EntityManager em = getEntityManager();
-    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Dlc> consulta = cBuilder.createQuery(Dlc.class);
-    Root<Dlc> rootQuery = consulta.from(Dlc.class);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+          CriteriaQuery<Dlc> consulta = cBuilder.createQuery(Dlc.class);
+          Root<Dlc> rootQuery = consulta.from(Dlc.class);
 
-    consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("nombre"), "%" + nombre + "%"));
+          consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("nombre"), "%" + nombre + "%"));
 
-    return em.createQuery(consulta).getResultList();
+          List<Dlc> result = em.createQuery(consulta).getResultList();
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   public List<Dlc> findDLCByPrecioRange(double precioMin, double precioMax) {
-    EntityManager em = getEntityManager();
-    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<Dlc> consulta = cBuilder.createQuery(Dlc.class);
-    Root<Dlc> rootQuery = consulta.from(Dlc.class);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          CriteriaBuilder cBuilder = em.getCriteriaBuilder();
+          CriteriaQuery<Dlc> consulta = cBuilder.createQuery(Dlc.class);
+          Root<Dlc> rootQuery = consulta.from(Dlc.class);
 
-    consulta.select(rootQuery).where(cBuilder.between(rootQuery.get("precio"), precioMin, precioMax));
+          consulta.select(rootQuery).where(cBuilder.between(rootQuery.get("precio"), precioMin, precioMax));
 
-    return em.createQuery(consulta).getResultList();
+          List<Dlc> result = em.createQuery(consulta).getResultList();
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
-
 }

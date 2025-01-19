@@ -187,49 +187,72 @@ public class PlataformaJpaController implements Serializable {
   }
 
   public List<Plataforma> findPlataformaEntities() {
-    return findPlataformaEntities(true, -1, -1);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          List<Plataforma> result = findPlataformaEntities(true, -1, -1);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   public List<Plataforma> findPlataformaEntities(int maxResults, int firstResult) {
-    return findPlataformaEntities(false, maxResults, firstResult);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          List<Plataforma> result = findPlataformaEntities(false, maxResults, firstResult);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   private List<Plataforma> findPlataformaEntities(boolean all, int maxResults, int firstResult) {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(Plataforma.class));
-      Query q = em.createQuery(cq);
-      if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+      EntityManager em = getEntityManager();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          cq.select(cq.from(Plataforma.class));
+          Query q = em.createQuery(cq);
+          if (!all) {
+              q.setMaxResults(maxResults);
+              q.setFirstResult(firstResult);
+          }
+          return q.getResultList();
+      } finally {
+          em.close();
       }
-      return q.getResultList();
-    } finally {
-      em.close();
-    }
   }
 
   public Plataforma findPlataforma(String id) {
-    EntityManager em = getEntityManager();
-    try {
-      return em.find(Plataforma.class, id);
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          Plataforma result = em.find(Plataforma.class, id);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   public int getPlataformaCount() {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<Plataforma> rt = cq.from(Plataforma.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          Root<Plataforma> rt = cq.from(Plataforma.class);
+          cq.select(em.getCriteriaBuilder().count(rt));
+          Query q = em.createQuery(cq);
+          int count = ((Long) q.getSingleResult()).intValue();
+          em.getTransaction().commit();
+          return count;
+      } finally {
+          em.close();
+      }
   }
+
   
 }
