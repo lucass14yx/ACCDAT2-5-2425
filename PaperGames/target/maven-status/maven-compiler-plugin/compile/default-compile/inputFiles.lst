@@ -1,5 +1,7 @@
-/home/rezzt/Documentos/github-data/instituto-data/ACCDAT2-5-2425/PaperGames/src/main/java/accdat/papergames/CollectData.java
 /home/rezzt/Documentos/github-data/instituto-data/ACCDAT2-5-2425/PaperGames/src/main/java/accdat/papergames/Controlador/Controlador.java
+/home/rezzt/Documentos/github-data/instituto-data/ACCDAT2-5-2425/PaperGames/src/main/java/accdat/papergames/Controlador/ControladorCreacion.java
+/home/rezzt/Documentos/github-data/instituto-data/ACCDAT2-5-2425/PaperGames/src/main/java/accdat/papergames/Controlador/ControladorModificacion.java
+/home/rezzt/Documentos/github-data/instituto-data/ACCDAT2-5-2425/PaperGames/src/main/java/accdat/papergames/Modelo/CollectData.java
 /home/rezzt/Documentos/github-data/instituto-data/ACCDAT2-5-2425/PaperGames/src/main/java/accdat/papergames/Modelo/Controllers/DlcJpaController.java
 /home/rezzt/Documentos/github-data/instituto-data/ACCDAT2-5-2425/PaperGames/src/main/java/accdat/papergames/Modelo/Controllers/GeneroJpaController.java
 /home/rezzt/Documentos/github-data/instituto-data/ACCDAT2-5-2425/PaperGames/src/main/java/accdat/papergames/Modelo/Controllers/ModoJuegoJpaController.java
