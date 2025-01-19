@@ -5,16 +5,27 @@
 package accdat.papergames.Vista;
 
 import accdat.papergames.Controlador.Controlador;
+import accdat.papergames.Controlador.ControladorModificacion;
 import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import static accdat.papergames.Vista.InterfazVista.OPERACION_MODIFICAR_VIDEOJUGO;
+import java.awt.Button;
 import java.awt.Checkbox;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Point;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.swing.JScrollPane;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
 
 /**
  *
@@ -44,8 +55,6 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   public VentanaModVideojuego(Long inputIdVideojuego) {
     this.idVideojuego = inputIdVideojuego;
     initComponents();
-    
-    btnAceptar.setActionCommand(InterfazVista.OPERACION_MODIFICAR_VIDEOJUGO);
     
     txtDescripcion.setLineWrap(true);
     txtDescripcion.setWrapStyleWord(true);
@@ -381,7 +390,6 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   }//GEN-LAST:event_btnCancelarActionPerformed
 
   private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-
     recogerDatosCampos();
     this.controlador.modificarVideojuego(videojuegoSelected);
     this.ventanaPadre.agregarVisores(this.controlador.cargarVideojuegos());
@@ -441,16 +449,57 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   }
   
   private void recogerDatosCampos () {
-    videojuegoSelected.setTitulo(txtTitulo.getText());
-    videojuegoSelected.setDescripcion(txtDescripcion.getText());
-    videojuegoSelected.setPegi((short) Integer.parseInt(cboxListaPegi.getSelectedItem().toString()));
-    videojuegoSelected.setAño((short) this.anioSalida);
-    videojuegoSelected.setNombreGenero(this.controlador.encontrarGenero((String) this.cboxListaGeneros.getSelectedItem()));
+    if (txtTitulo.getText().isEmpty() && txtDescripcion.getText().isEmpty() && listaPlataformasVideojuego.isEmpty() && listaModosJuegoVideojuego.isEmpty()) {
+      generarPopup();
+    } else {
+      videojuegoSelected.setTitulo(txtTitulo.getText());
+      videojuegoSelected.setDescripcion(txtDescripcion.getText());
+      videojuegoSelected.setPegi((short) Integer.parseInt(cboxListaPegi.getSelectedItem().toString()));
+      videojuegoSelected.setAño((short) this.anioSalida);
+      videojuegoSelected.setNombreGenero(this.controlador.encontrarGenero((String) this.cboxListaGeneros.getSelectedItem()));
+
+      insertarModosJuegoVideojuego();
+      insertarPlataformasVideojuego();
+      videojuegoSelected.setModoJuegoCollection(listaModosJuegoVideojuego);
+      videojuegoSelected.setPlataformaCollection(listaPlataformasVideojuego);
+    }
     
-    insertarModosJuegoVideojuego();
-    insertarPlataformasVideojuego();
-    videojuegoSelected.setModoJuegoCollection(listaModosJuegoVideojuego);
-    videojuegoSelected.setPlataformaCollection(listaPlataformasVideojuego);
+    
+  }
+ //------------------------------------------------------------------------------------------------------------->
+  private void generarPopup () {
+    java.awt.Frame framePopup = new Frame("ERROR MODIFICACION VIDEOJUEGO");
+      framePopup.setSize(400, 300);
+      framePopup.setLayout(new GridLayout(0, 1));
+      framePopup.setVisible(true);
+      
+      Label mensajePopup = new Label("ERROR EN LA MODIFICACION DEL VIDEOJUEGO");
+      framePopup.add(mensajePopup);
+      
+      Button showPopupBtn = new Button("Aceptar");
+      showPopupBtn.setBounds(150, 120, 100 ,30);
+      framePopup.add(showPopupBtn);
+      
+      PopupFactory popupFactory = new PopupFactory();
+      
+      Label popupLabel = new Label("Datos introducidos de manera incorrecta");
+        popupLabel.setBackground(Color.LIGHT_GRAY);
+        popupLabel.setSize(150, 50);
+        popupLabel.setAlignment(Label.CENTER);
+      
+      showPopupBtn.addActionListener(e -> {
+        Point buttonLocation = showPopupBtn.getLocationOnScreen();
+        Popup popup = popupFactory.getPopup(framePopup, popupLabel, buttonLocation.x, buttonLocation.y + 40);
+        popup.hide();
+        framePopup.dispose();
+      });
+      
+      framePopup.addWindowListener(new WindowAdapter () {
+        @Override
+        public void windowClosing (WindowEvent e) {
+          framePopup.dispose();
+        }
+      });
   }
   
  //------------------------------------------------------------------------------------------------------------->
@@ -564,7 +613,6 @@ public class VentanaModVideojuego extends javax.swing.JFrame implements Interfaz
   @Override
   public void setControlador(Controlador c) {
     this.controlador = c;
-    btnAceptar.addActionListener(c);
   }
 
   @Override
