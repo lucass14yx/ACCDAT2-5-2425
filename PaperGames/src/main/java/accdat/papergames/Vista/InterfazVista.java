@@ -5,7 +5,6 @@
 package accdat.papergames.Vista;
 
 import accdat.papergames.Controlador.Controlador;
-import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import java.util.List;
 
@@ -21,6 +20,8 @@ public interface InterfazVista {
   static final String FILTRO_SELECT_PEGI = "filtro de seleccionar el pegi";
   static final String FILTRO_SELECT_MODO_JUEGO = "filtro de seleccionar el modo de juego";
   static final String OPERACION_MODIFICAR_VIDEOJUGO = "operacion de modificacion de videojuego";
+  static final String OPERACION_CREAR_VIDEOJUEGO = "operacion de creacion de videojuego";
+  static final String CARGAR_DATOS = "operacion de carga de datos";
   
  //-------------------------------------------------------------------------------------------------------------------->
   void agregarVisores(List<Videojuego> inputListaVideojuegos);  

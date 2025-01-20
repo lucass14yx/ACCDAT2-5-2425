@@ -17,6 +17,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,85 +55,70 @@ public class FiltrosBBDD_JPQL {
  //------------------------------------------------------------------------------->
    // metodos publicos | consultas de videojuegos ->
     // metodo publico | consultaVideojuegoPorNombre =>
-  public List<Videojuego> consultaVideojuegoPorNombre (String inputTitulo) {
-    CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
-    
-    consulta.select(rootQuery).where(cBuilder.like(rootQuery.get("titulo"), "%" + inputTitulo + "%"));
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
-    return listaVideojuegos;
+  public List<Videojuego> consultaVideojuegoPorNombre(String inputTitulo) {
+      String jpql = "SELECT v FROM Videojuego v WHERE LOWER(v.titulo) LIKE LOWER(:titulo)";
+      return entityManager.createQuery(jpql, Videojuego.class)
+               .setParameter("titulo", "%" + inputTitulo + "%")
+               .getResultList();
   }
+
   
     // metodo publico | consultaVideojuegoPorAio =>
-  public List<Videojuego> consultaVideojuegoPorAio(Integer inputAnioMin, Integer inputAnioMax) {
-    CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
-    
-    Predicate filtro = cBuilder.conjunction();
-    if (inputAnioMin != null) {
-      filtro = cBuilder.and(filtro, cBuilder.greaterThanOrEqualTo(rootQuery.get("año"), inputAnioMin));
-    }
-    if (inputAnioMax != null) {
-      filtro = cBuilder.and(filtro, cBuilder.lessThanOrEqualTo(rootQuery.get("año"), inputAnioMax));
-    }
-    
-    consulta.select(rootQuery).where(filtro);
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
-    return listaVideojuegos;
+  public List<Videojuego> consultaVideojuegoPorAnio(Integer inputAnioMin, Integer inputAnioMax) {
+      String jpql = "SELECT v FROM Videojuego v WHERE v.año BETWEEN :anioMin AND :anioMax";
+      return entityManager.createQuery(jpql, Videojuego.class)
+               .setParameter("anioMin", inputAnioMin)
+               .setParameter("anioMax", inputAnioMax)
+               .getResultList();
   }
+
   
     // metodo publico | consultaVideojuegoPorPlataforma =>
-  public List<Videojuego> consultaVideojuegoPorPlataforma (List<String> inputPlataformas) {
-    CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootVideoJuego = consulta.from(Videojuego.class);
-    
-     // subconsulta para filtrar videojuegos por plataformas ->
-    Subquery<Long> subquery = consulta.subquery(Long.class);
-    Root<Videojuego> subRoot = subquery.from(Videojuego.class);
-    
-    subquery.select(subRoot.get("idVideojuego"))
-            .where(subRoot.get("idVideojuego").in(
-            entityManager.createQuery("SELECT DISTINCT vp.id_videojuego FROM VIDEOJUEGO_PLATAFORMAS vp WHERE vp.nombre_plataforma IN :plataformas", Long.class)
-                    .setParameter("plataformas", inputPlataformas).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList()
-            ));
-    
-    consulta.select(rootVideoJuego).where(rootVideoJuego.get("idVideojuego").in(subquery));
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
-    return listaVideojuegos;
+  public List<Videojuego> consultaVideojuegoPorPlataforma(List<String> inputPlataformas) {
+      String jpql = """
+                    SELECT DISTINCT v FROM Videojuego v 
+                    JOIN v.plataformaCollection p 
+                    WHERE p.nombrePlataforma IN :plataformas
+                    """;
+      return entityManager.createQuery(jpql, Videojuego.class)
+               .setParameter("plataformas", inputPlataformas)
+               .getResultList();
   }
+
   
     // metodo publico | consultaVideojuegoPorModoJuego =>
-  public List<Videojuego> consultaVideojuegoPorModoJuego (List<String> inputModosJuego) {
-    CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootVideoJuego = consulta.from(Videojuego.class);
-    
-    Subquery<Long> subquery = consulta.subquery(Long.class);
-    Root<Videojuego> subRoot = subquery.from(Videojuego.class);
-    
-    subquery.select(subRoot.get("idVideojuego")).where(subRoot.get("idVideojuego").in(
-            entityManager.createQuery("SELECT DISTINCT vmj.id_videojuego FROM VIDEOJUEGO_MODO_JUEGO vmj WHERE vmj.nombre_modo_juego IN :modosjuego", Long.class)
-            .setParameter("modosjuego", inputModosJuego).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList()
-    ));
-    
-    consulta.select(rootVideoJuego).where(rootVideoJuego.get("idVideojuego").in(subquery));
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
-    return listaVideojuegos;
+  public List<Videojuego> consultaVideojuegoPorModoJuego(List<String> inputModosJuego) {
+    abrirFactory();
+    if (inputModosJuego == null || inputModosJuego.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    String jpql = """
+                  SELECT v FROM Videojuego v
+                  WHERE EXISTS (
+                    SELECT 1 FROM v.modoJuegoCollection m
+                    WHERE m.nombreModoJuego IN :modosJuego
+                  )
+                """;
+
+    try {
+      return entityManager.createQuery(jpql, Videojuego.class)
+                 .setParameter("modosJuego", inputModosJuego)
+                 .getResultList();
+    } catch (Exception e) {
+      e.printStackTrace(); // O usa un logger
+      return Collections.emptyList();
+    }
   }
   
     // metodo publico | consultaVideojuegoPorPEGI =>
-  public List<Videojuego> consultaVideojuegoPorPEGI (List<Integer> inputPEGI) {
-    CriteriaBuilder cBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Videojuego> consulta = cBuilder.createQuery(Videojuego.class);
-    Root<Videojuego> rootQuery = consulta.from(Videojuego.class);
-    
-    consulta.select(rootQuery).where(rootQuery.get("pegi").in(inputPEGI));
-    List<Videojuego> listaVideojuegos = entityManager.createQuery(consulta).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
-    return listaVideojuegos;
+  public List<Videojuego> consultaVideojuegoPorPEGI(List<Integer> inputPEGI) {
+      String jpql = "SELECT v FROM Videojuego v WHERE v.pegi IN :pegi";
+      return entityManager.createQuery(jpql, Videojuego.class)
+               .setParameter("pegi", inputPEGI)
+               .getResultList();
   }
+
   
  //------------------------------------------------------------------------------->
    // metodos publicos | consultas de dlc ->
@@ -235,19 +221,18 @@ public class FiltrosBBDD_JPQL {
     return numRegistrosActualizados;
   }
   
-  public List<Videojuego> consultaVideojuegoPorGenero(List<String> nombreGeneros) {
+public List<Videojuego> consultaVideojuegoPorGenero(List<String> nombreGeneros) {
     abrirFactory(); 
     entityManager.getTransaction().begin();
     
     List<Videojuego> listaVideojuegos = entityManager.createQuery(
-        "SELECT v FROM Videojuego v JOIN v.genero g WHERE g.nombreGenero IN :generos", Videojuego.class)
+        "SELECT v FROM Videojuego v WHERE v.nombreGenero.nombreGenero IN :generos", Videojuego.class)
         .setParameter("generos", nombreGeneros)
         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
         .getResultList();
     
     entityManager.getTransaction().commit();
-    cerrarFactory(); 
     
     return listaVideojuegos;
-  }
+}
 }

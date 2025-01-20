@@ -138,49 +138,71 @@ public class ModoJuegoJpaController implements Serializable {
   }
 
   public List<ModoJuego> findModoJuegoEntities() {
-    return findModoJuegoEntities(true, -1, -1);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          List<ModoJuego> result = findModoJuegoEntities(true, -1, -1);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   public List<ModoJuego> findModoJuegoEntities(int maxResults, int firstResult) {
-    return findModoJuegoEntities(false, maxResults, firstResult);
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          List<ModoJuego> result = findModoJuegoEntities(false, maxResults, firstResult);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   private List<ModoJuego> findModoJuegoEntities(boolean all, int maxResults, int firstResult) {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      cq.select(cq.from(ModoJuego.class));
-      Query q = em.createQuery(cq);
-      if (!all) {
-        q.setMaxResults(maxResults);
-        q.setFirstResult(firstResult);
+      EntityManager em = getEntityManager();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          cq.select(cq.from(ModoJuego.class));
+          Query q = em.createQuery(cq);
+          if (!all) {
+              q.setMaxResults(maxResults);
+              q.setFirstResult(firstResult);
+          }
+          return q.getResultList();
+      } finally {
+          em.close();
       }
-      return q.getResultList();
-    } finally {
-      em.close();
-    }
   }
 
   public ModoJuego findModoJuego(String id) {
-    EntityManager em = getEntityManager();
-    try {
-      return em.find(ModoJuego.class, id);
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          ModoJuego result = em.find(ModoJuego.class, id);
+          em.getTransaction().commit();
+          return result;
+      } finally {
+          em.close();
+      }
   }
 
   public int getModoJuegoCount() {
-    EntityManager em = getEntityManager();
-    try {
-      CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-      Root<ModoJuego> rt = cq.from(ModoJuego.class);
-      cq.select(em.getCriteriaBuilder().count(rt));
-      Query q = em.createQuery(cq);
-      return ((Long) q.getSingleResult()).intValue();
-    } finally {
-      em.close();
-    }
+      EntityManager em = getEntityManager();
+      em.getTransaction().begin();
+      try {
+          CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+          Root<ModoJuego> rt = cq.from(ModoJuego.class);
+          cq.select(em.getCriteriaBuilder().count(rt));
+          Query q = em.createQuery(cq);
+          int count = ((Long) q.getSingleResult()).intValue();
+          em.getTransaction().commit();
+          return count;
+      } finally {
+          em.close();
+      }
   }
   
 }

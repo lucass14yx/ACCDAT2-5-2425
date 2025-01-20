@@ -4,8 +4,6 @@
  */
 package accdat.papergames.Controlador;
 
-import accdat.papergames.Modelo.CollectData;
-import accdat.papergames.Modelo.Filtros.FiltrosBBDD_JPQL;
 import accdat.papergames.Modelo.Filtros.FiltrosJPAController;
 import accdat.papergames.Modelo.HelperOperaciones;
 import accdat.papergames.Modelo.ModeloService;
@@ -14,64 +12,43 @@ import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import accdat.papergames.Vista.InterfazVista;
+import accdat.papergames.Vista.VentanaCreateVideojuego;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
-
 /**
  *
- * @author USUARIO
+ * @author rezzt
  */
-public class Controlador implements ActionListener{
-  private final InterfazVista vista;
+public class ControladorCreacion implements ActionListener {
+  private InterfazVista vista;
   private final HelperOperaciones modeloOperaciones;
   private final ModeloService modeloServicios;
   private final FiltrosJPAController modeloFiltros;
-  private final FiltrosBBDD_JPQL modeloFiltrosJPQL;
-  private final CollectData cargaDeDatos;
-
-
-  public Controlador(InterfazVista inputVista, HelperOperaciones inputModeloOper, 
-          ModeloService inputModeloServicios, FiltrosJPAController inputModeloFiltros, FiltrosBBDD_JPQL inputModeloFiltrosJPQL) {
-    this.vista = inputVista;
-    this.modeloOperaciones = inputModeloOper;
-    this.modeloServicios = inputModeloServicios;
-    this.modeloFiltros = inputModeloFiltros;
-    this.modeloFiltrosJPQL = inputModeloFiltrosJPQL;
-    this.vista.setControlador(this);
-    this.vista.agregarVisores(cargarVideojuegos());
-    this.cargaDeDatos = new CollectData();
+  private Videojuego modVideojuego;
+  
+ //------------------------------------------------------------------------------------------>
+  public ControladorCreacion (InterfazVista inputVIsta) {
+    this.vista = inputVIsta;
+    this.modeloOperaciones = new HelperOperaciones();
+    this.modeloServicios = new ModeloService();
+    this.modeloFiltros = new FiltrosJPAController();
   }
   
-  public Controlador (InterfazVista inputVista) {
-    this.vista = inputVista;
-    this.modeloOperaciones = new HelperOperaciones();
-    this.modeloFiltros = new FiltrosJPAController();
-    this.modeloServicios = new ModeloService();
-    this.modeloFiltrosJPQL = new FiltrosBBDD_JPQL();
-    this.vista.setControlador(this);
-    this.vista.agregarVisores(cargarVideojuegos());
-    this.cargaDeDatos = new CollectData();
-  }
-
-
+ //------------------------------------------------------------------------------------------>
   @Override
   public void actionPerformed(ActionEvent evento) {
-    switch (evento.getActionCommand()){
-      case InterfazVista.CARGAR_DATOS -> {
-        this.cargaDeDatos.generarGeneros();
-        this.cargaDeDatos.generarModosJuego();
-        this.cargaDeDatos.generarPlataformas();
-        this.cargaDeDatos.generarVideojuegos();
+    switch (evento.getActionCommand()) {
+      case InterfazVista.OPERACION_CREAR_VIDEOJUEGO -> {
+        modificarVideojuego(vista.getVideojuegoSelected());
       }
     }
   }
   
- //------------------------------------------------------------------------------------>
+  //------------------------------------------------------------------------------------>
    // metodos publicos | complementarios ->
     // metodo | cargarVideojuegos ->
   public List<Videojuego> cargarVideojuegos () {
@@ -138,6 +115,12 @@ public class Controlador implements ActionListener{
   public void modificarVideojuego (Videojuego inputVideojuego) {
     modeloServicios.modificarVideojuego(inputVideojuego);
   }
+  
+  public void crearNuevoVideojuego (String inputTitulo, String inputDescripcion, short inputAnioSalida, 
+          short inputPegi, String inputGenero, Collection<Plataforma> inputPlataformas, Collection<ModoJuego> inputModosJuego) {
+    this.modeloOperaciones.insertarVideojuego(inputTitulo, inputDescripcion, inputAnioSalida, inputPegi, inputGenero, inputPlataformas, inputModosJuego);
+  }
+  
   public void eliminarVideojuego (Videojuego inputVideojuego) {
     modeloServicios.borraVideojuego(inputVideojuego);
   }
@@ -162,44 +145,4 @@ public class Controlador implements ActionListener{
   public Videojuego encontrarVideojuego (Long inputId) {
     return modeloServicios.listarUnVideojuego(inputId);
   }
-  
- //-------------------------------------------------------------------------------------------------------------->
-  public List<Videojuego> recuperarJuegosFiltroPlataformas (List<String> inputListaFiltros) {
-    List<Videojuego> listaVideojuegosFiltrada = new ArrayList<>();
-    listaVideojuegosFiltrada = modeloFiltros.consultaVideojuegoPorPlataforma(inputListaFiltros);
-    return listaVideojuegosFiltrada;
-  }
-  
-  public List<Videojuego> recuperarJuegosFiltroGeneros (List<String> inputListaFiltros) {
-    List<Videojuego> listaVideojuegosFiltrada = new ArrayList<>();
-    listaVideojuegosFiltrada = modeloFiltrosJPQL.consultaVideojuegoPorGenero(inputListaFiltros);
-    return listaVideojuegosFiltrada;
-  }
-  
-  public List<Videojuego> recuperarJuegosFiltroModosJuego (List<String> inputListaFiltros) {
-    List<Videojuego> listaVideojuegosFiltrada = new ArrayList<>();
-    listaVideojuegosFiltrada = modeloFiltrosJPQL.consultaVideojuegoPorModoJuego(inputListaFiltros);
-    return listaVideojuegosFiltrada;
-  }
-  
-  public List<Videojuego> recuperarJuegosFiltroPEGI (List<Integer> inputListaFiltros) {
-    List<Videojuego> listaVideojuegosFiltrada = new ArrayList<>();
-    listaVideojuegosFiltrada = modeloFiltros.consultaVideojuegoPorPEGI(inputListaFiltros);
-    return listaVideojuegosFiltrada;
-  }
-  
-  public List<Videojuego> recuperarJuegosFiltroAnioMinMax (int inputAnioMin, int inputAnioMax) {
-    List<Videojuego> listaVideojuegosFiltrada = new ArrayList<>();
-    listaVideojuegosFiltrada = modeloFiltros.consultaVideojuegoPorAnio(inputAnioMin, inputAnioMax);
-    return listaVideojuegosFiltrada;
-  }
-  
- //-------------------------------------------------------------------------------------------------------------->
-  public void crearNuevoVideojuego (String inputTitulo, String inputDescripcion, short inputAnioSalida, 
-          short inputPegi, String inputGenero, Collection<Plataforma> inputPlataformas, Collection<ModoJuego> inputModosJuego) {
-    this.modeloOperaciones.insertarVideojuego(inputTitulo, inputDescripcion, inputAnioSalida, inputPegi, inputGenero, inputPlataformas, inputModosJuego);
-  }
-  
- //-------------------------------------------------------------------------------------------------------------->
-  
 }

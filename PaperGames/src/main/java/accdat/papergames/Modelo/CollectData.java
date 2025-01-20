@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package accdat.papergames;
+package accdat.papergames.Modelo;
 
 import accdat.papergames.Modelo.Controllers.DlcJpaController;
 import accdat.papergames.Modelo.Controllers.GeneroJpaController;
@@ -39,6 +39,7 @@ public class CollectData {
   private static PlataformaJpaController platController = new PlataformaJpaController(emFactory);
   private static VideojuegoJpaController videojuegoController = new VideojuegoJpaController(emFactory);
   
+<<<<<<< HEAD:PaperGames/src/main/java/accdat/papergames/CollectData.java
  //------------------------------------------------------------------------------------------------->
   public static void main(String[] args) {
 //     generarGeneros();
@@ -46,10 +47,12 @@ public class CollectData {
 //     generarPlataformas();
 //     generarVideojuegos();
   }
+=======
+>>>>>>> main:PaperGames/src/main/java/accdat/papergames/Modelo/CollectData.java
   
  //------------------------------------------------------------------------------------------------->
    // metodo complementario | generarGeneros ->
-  public static void generarGeneros () {
+  public void generarGeneros () {
     List<Genero> listaCrearGeneros = new ArrayList<>();
     int contInserts = 0;
     
@@ -78,7 +81,7 @@ public class CollectData {
   }
   
   
-  public static void generarModosJuego () {
+  public void generarModosJuego () {
     List<ModoJuego> listaCrearModosJuego = new ArrayList<>();
     int contInserts = 0;
     
@@ -107,7 +110,7 @@ public class CollectData {
   }
   
   
-  public static void generarPlataformas () {
+  public void generarPlataformas () {
     List<Plataforma> listaCrearPlataformas = new ArrayList<>();
     int contInserts = 0;
     
@@ -140,7 +143,7 @@ public class CollectData {
   }
   
   
-  public static void generarVideojuegos () {
+  public void generarVideojuegos () {
     List<Videojuego> listaCrearVideojuegos = new ArrayList<>();
     int contInserts = 0;
     

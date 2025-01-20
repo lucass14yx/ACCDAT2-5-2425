@@ -5,15 +5,25 @@
 package accdat.papergames.Vista;
 
 import accdat.papergames.Controlador.Controlador;
+import accdat.papergames.Controlador.ControladorCreacion;
 import accdat.papergames.Modelo.Persistencia.ModoJuego;
 import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
+import java.awt.Button;
 import java.awt.Checkbox;
+import java.awt.Color;
+import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Point;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JScrollPane;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
 
 /**
  *
@@ -21,8 +31,10 @@ import javax.swing.JScrollPane;
  */
 public class VentanaCreateVideojuego extends javax.swing.JFrame implements InterfazVista {
  //------------------------------------------------------------------------------------------------------------------------------------->
-  private Controlador controlador;
+  private ControladorCreacion controlador;
+  private Controlador controladorBase;
   private VentanaPrincipal ventanaPadre;
+  private Videojuego videojuegoSelected;
   
   private String titulo;
   private String descripcion;
@@ -55,7 +67,8 @@ public class VentanaCreateVideojuego extends javax.swing.JFrame implements Inter
   }
   
   private void iniciarComponentes () {
-    this.controlador = new Controlador(this);
+    this.controladorBase = new Controlador(this);
+    this.controlador = new ControladorCreacion(this);
     panelListaPlataforma.setLayout(new GridLayout(0,1));
     panelListaModosJuego.setLayout(new GridLayout(0,1));
     
@@ -326,7 +339,7 @@ public class VentanaCreateVideojuego extends javax.swing.JFrame implements Inter
  //------------------------------------------------------------------------------------------------------------------------------------->
   private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
     recogerDatosCampos();
-    crearUsuario();
+    crearVideojuego();
     this.ventanaPadre.agregarVisores(this.controlador.cargarVideojuegos());
     this.ventanaPadre.setVisible(true);
     this.dispose();
@@ -343,37 +356,6 @@ public class VentanaCreateVideojuego extends javax.swing.JFrame implements Inter
   /**
    * @param args the command line arguments
    */
-  public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-      for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          javax.swing.UIManager.setLookAndFeel(info.getClassName());
-          break;
-        }
-      }
-    } catch (ClassNotFoundException ex) {
-      java.util.logging.Logger.getLogger(VentanaCreateVideojuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-      java.util.logging.Logger.getLogger(VentanaCreateVideojuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-      java.util.logging.Logger.getLogger(VentanaCreateVideojuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-      java.util.logging.Logger.getLogger(VentanaCreateVideojuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
-
-    /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        new VentanaCreateVideojuego().setVisible(true);
-      }
-    });
-  }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton btnAceptar;
@@ -414,8 +396,48 @@ public class VentanaCreateVideojuego extends javax.swing.JFrame implements Inter
     insertarModosJuego();
   }
   
-  private void crearUsuario () {
-    this.controlador.crearNuevoVideojuego(titulo, descripcion,(short) anioSalida,(short) pegiSelected, generoSelected, listaPlataformasSelected, listaModosJuegoSelected);
+  private void crearVideojuego () {
+    if (!titulo.isEmpty() && !descripcion.isEmpty() && !generoSelected.isEmpty() && !listaPlataformasSelected.isEmpty() && !listaModosJuegoSelected.isEmpty()) {
+      this.controlador.crearNuevoVideojuego(titulo, descripcion,(short) anioSalida,(short) pegiSelected, generoSelected, listaPlataformasSelected, listaModosJuegoSelected);
+    } else {
+      generarPopup();
+    }
+  }
+  
+ //------------------------------------------------------------------------------------------------------------------------------------->
+  private void generarPopup () {
+    java.awt.Frame framePopup = new Frame("ERROR INSERCION VIDEOJUEGO");
+      framePopup.setSize(400, 300);
+      framePopup.setLayout(new GridLayout(0, 1));
+      framePopup.setVisible(true);
+      
+      Label mensajePopup = new Label("ERROR EN LA MODIFICACION DEL VIDEOJUEGO");
+      framePopup.add(mensajePopup);
+      
+      Button showPopupBtn = new Button("Aceptar");
+      showPopupBtn.setBounds(150, 120, 100 ,30);
+      framePopup.add(showPopupBtn);
+      
+      PopupFactory popupFactory = new PopupFactory();
+      
+      Label popupLabel = new Label("Datos introducidos de manera incorrecta");
+        popupLabel.setBackground(Color.LIGHT_GRAY);
+        popupLabel.setSize(150, 50);
+        popupLabel.setAlignment(Label.CENTER);
+      
+      showPopupBtn.addActionListener(e -> {
+        Point buttonLocation = showPopupBtn.getLocationOnScreen();
+        Popup popup = popupFactory.getPopup(framePopup, popupLabel, buttonLocation.x, buttonLocation.y + 40);
+        popup.hide();
+        framePopup.dispose();
+      });
+      
+      framePopup.addWindowListener(new WindowAdapter () {
+        @Override
+        public void windowClosing (WindowEvent e) {
+          framePopup.dispose();
+        }
+      });
   }
   
  //-------------------------------------------------------------------------------------------------------------------------------------> 
@@ -503,12 +525,13 @@ public class VentanaCreateVideojuego extends javax.swing.JFrame implements Inter
 
   @Override
   public void setControlador(Controlador c) {
-    this.controlador = c;
+    this.controladorBase = c;
   }
 
   @Override
   public void arranca() {
-    this.controlador = new Controlador(this);
+    this.controladorBase = new Controlador(this);
+    this.controlador = new ControladorCreacion(this);
     pack();
     setLocationRelativeTo(null);
     setVisible(true);
@@ -517,7 +540,7 @@ public class VentanaCreateVideojuego extends javax.swing.JFrame implements Inter
 
   @Override
   public Videojuego getVideojuegoSelected() {
-    return null;
+    return videojuegoSelected;
   }
 
   @Override

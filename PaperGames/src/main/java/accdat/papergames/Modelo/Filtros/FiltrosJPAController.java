@@ -8,6 +8,8 @@ package accdat.papergames.Modelo.Filtros;
 import accdat.papergames.Modelo.Controllers.DlcJpaController;
 import accdat.papergames.Modelo.Controllers.VideojuegoJpaController;
 import accdat.papergames.Modelo.Persistencia.Dlc;
+import accdat.papergames.Modelo.Persistencia.ModoJuego;
+import accdat.papergames.Modelo.Persistencia.Plataforma;
 import accdat.papergames.Modelo.Persistencia.Videojuego;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -43,6 +45,9 @@ public class FiltrosJPAController {
     return instace;
   }
   
+  private void abrirConexion () {
+    emFactory = Persistence.createEntityManagerFactory("accdat_PaperGames_jar_1.0-SNAPSHOTPU");
+  }
   private void cerrarConexion() {
     emFactory.close();
   }
@@ -67,13 +72,13 @@ public class FiltrosJPAController {
     // metodo publico | consultaVideojuegoPorAnio =>
   public List<Videojuego> consultaVideojuegoPorAnio (Integer inputAnioMin, Integer inputAnioMax) {
     List<Videojuego> listaVideojuegos = new ArrayList<>();
-    try {
-      listaVideojuegos = videojuegoController.findVideojuegoByAnioPublicacionRange(inputAnioMin, inputAnioMax);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      listaVideojuegos = null;
-    } finally {
-      cerrarConexion();
+    abrirConexion();
+    List<Videojuego> listaVideojuegosDB = videojuegoController.findVideojuegoEntities();
+    
+    for (Videojuego auxV : listaVideojuegosDB) {
+      if ((auxV.getAño() >= inputAnioMin) && (auxV.getAño() <= inputAnioMax)) {
+        listaVideojuegos.add(auxV);
+      }
     }
     
     return  listaVideojuegos;
@@ -82,13 +87,16 @@ public class FiltrosJPAController {
     // metodo publico | consultaVideojuegoPorPlataforma =>
   public List<Videojuego> consultaVideojuegoPorPlataforma (List<String> inputPlataformas) {
     List<Videojuego> listaVideojuegos = new ArrayList<>();
-    try {
-      listaVideojuegos = videojuegoController.findVideojuegoByPlataformas(inputPlataformas);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      listaVideojuegos = null;
-    } finally {
-      cerrarConexion();
+    abrirConexion();
+    List<Videojuego> listaVideojuegosDB = videojuegoController.findVideojuegoEntities();
+    cerrarConexion();
+    
+    for (Videojuego auxV : listaVideojuegosDB) {
+      for (String auxP : inputPlataformas) {
+        if (auxV.getPlataformaCollection().contains(new Plataforma(auxP))) {
+          listaVideojuegos.add(auxV);
+        }
+      }
     }
     
     return  listaVideojuegos;
@@ -97,13 +105,16 @@ public class FiltrosJPAController {
     // metodo publico | consultaVideojuegoPorModoJuego =>
   public List<Videojuego> consultaVideojuegoPorModoJuego (List<String> inputModosJuego) {
     List<Videojuego> listaVideojuegos = new ArrayList<>();
-    try {
-      listaVideojuegos = videojuegoController.findVideojuegoByModosJuego(inputModosJuego);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      listaVideojuegos = null;
-    } finally {
-      cerrarConexion();
+    abrirConexion();
+    List<Videojuego> listaVideojuegosDB = videojuegoController.findVideojuegoEntities();
+    cerrarConexion();
+    
+    for (Videojuego auxV : listaVideojuegosDB) {
+      for (String auxMJ : inputModosJuego) {
+        if (auxV.getModoJuegoCollection().contains(new ModoJuego(auxMJ))) {
+          listaVideojuegos.add(auxV);
+        }
+      }
     }
     
     return  listaVideojuegos;
@@ -112,15 +123,18 @@ public class FiltrosJPAController {
     // metodo publico | consultaVideojuegoPorPEGI =>
   public List<Videojuego> consultaVideojuegoPorPEGI (List<Integer> inputPEGI) {
     List<Videojuego> listaVideojuegos = new ArrayList<>();
-    try {
-      listaVideojuegos = videojuegoController.findVideojuegoByPEGI(inputPEGI);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      listaVideojuegos = null;
-    } finally {
-      cerrarConexion();
-    }
+    abrirConexion();
+    List<Videojuego> listaVideojuegosDB = videojuegoController.findVideojuegoEntities();
+    cerrarConexion();
     
+    for (Videojuego auxV : listaVideojuegosDB) {
+      for (Integer auxP : inputPEGI) {
+        if (auxV.getPegi() == auxP) {
+          listaVideojuegos.add(auxV);
+        }
+      }
+    }
+
     return  listaVideojuegos;
   }
   
