@@ -110,8 +110,6 @@ public class FiltrosBBDD_JPQL {
       return Collections.emptyList();
     }
   }
-
-
   
     // metodo publico | consultaVideojuegoPorPEGI =>
   public List<Videojuego> consultaVideojuegoPorPEGI(List<Integer> inputPEGI) {
