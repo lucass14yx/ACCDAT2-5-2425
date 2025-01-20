@@ -39,7 +39,7 @@ public class CollectData {
   private static PlataformaJpaController platController = new PlataformaJpaController(emFactory);
   private static VideojuegoJpaController videojuegoController = new VideojuegoJpaController(emFactory);
   
-<<<<<<< HEAD:PaperGames/src/main/java/accdat/papergames/CollectData.java
+
  //------------------------------------------------------------------------------------------------->
   public static void main(String[] args) {
 //     generarGeneros();
@@ -47,8 +47,7 @@ public class CollectData {
 //     generarPlataformas();
 //     generarVideojuegos();
   }
-=======
->>>>>>> main:PaperGames/src/main/java/accdat/papergames/Modelo/CollectData.java
+
   
  //------------------------------------------------------------------------------------------------->
    // metodo complementario | generarGeneros ->
