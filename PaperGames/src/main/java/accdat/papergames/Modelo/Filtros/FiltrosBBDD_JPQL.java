@@ -17,6 +17,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -87,16 +88,28 @@ public class FiltrosBBDD_JPQL {
   
     // metodo publico | consultaVideojuegoPorModoJuego =>
   public List<Videojuego> consultaVideojuegoPorModoJuego(List<String> inputModosJuego) {
-      String jpql = """
-                    SELECT DISTINCT v FROM Videojuego v 
-                    JOIN v.modoJuegoCollection m 
-                    WHERE m.nombreModoJuego IN :modosJuego
-                    """;
-      return entityManager.createQuery(jpql, Videojuego.class)
-               .setParameter("modosJuego", inputModosJuego)
-               .getResultList();
-  }
+    abrirFactory();
+    if (inputModosJuego == null || inputModosJuego.isEmpty()) {
+      return Collections.emptyList();
+    }
 
+    String jpql = """
+                  SELECT v FROM Videojuego v
+                  WHERE EXISTS (
+                    SELECT 1 FROM v.modoJuegoCollection m
+                    WHERE m.nombreModoJuego IN :modosJuego
+                  )
+                """;
+
+    try {
+      return entityManager.createQuery(jpql, Videojuego.class)
+                 .setParameter("modosJuego", inputModosJuego)
+                 .getResultList();
+    } catch (Exception e) {
+      e.printStackTrace(); // O usa un logger
+      return Collections.emptyList();
+    }
+  }
   
     // metodo publico | consultaVideojuegoPorPEGI =>
   public List<Videojuego> consultaVideojuegoPorPEGI(List<Integer> inputPEGI) {
@@ -208,19 +221,18 @@ public class FiltrosBBDD_JPQL {
     return numRegistrosActualizados;
   }
   
-  public List<Videojuego> consultaVideojuegoPorGenero(List<String> nombreGeneros) {
+public List<Videojuego> consultaVideojuegoPorGenero(List<String> nombreGeneros) {
     abrirFactory(); 
     entityManager.getTransaction().begin();
     
     List<Videojuego> listaVideojuegos = entityManager.createQuery(
-        "SELECT v FROM Videojuego v JOIN v.genero g WHERE g.nombreGenero IN :generos", Videojuego.class)
+        "SELECT v FROM Videojuego v WHERE v.nombreGenero.nombreGenero IN :generos", Videojuego.class)
         .setParameter("generos", nombreGeneros)
         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
         .getResultList();
     
     entityManager.getTransaction().commit();
-    cerrarFactory(); 
     
     return listaVideojuegos;
-  }
+}
 }
